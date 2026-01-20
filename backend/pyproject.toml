@@ -36,7 +36,8 @@ select = [
 ]
 
 ignore = [
-    "E501",  # Line too long (handled by formatter)
+    "E501",
+    "B008",
 ]
 
 exclude = [

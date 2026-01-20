@@ -1,7 +1,8 @@
-from fastapi import FastAPI, Depends, HTTPException
+
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from typing import Optional
+
 from database import get_db
 from models import Room, Venue
 
@@ -27,9 +28,9 @@ def read_root():
 
 @app.get("/api/rooms")
 def get_rooms(
-    city: Optional[str] = None,
-    theme: Optional[str] = None,
-    difficulty: Optional[int] = None,
+    city: str | None = None,
+    theme: str | None = None,
+    difficulty: int | None = None,
     db: Session = Depends(get_db),
 ):
     query = db.query(Room).join(Venue)

@@ -1,21 +1,22 @@
+from datetime import datetime
+
+from geoalchemy2 import Geography
 from sqlalchemy import (
+    ARRAY,
+    DECIMAL,
+    TIMESTAMP,
+    Boolean,
+    CheckConstraint,
     Column,
+    ForeignKey,
     Integer,
     String,
-    Float,
-    Boolean,
-    ForeignKey,
     Text,
-    ARRAY,
-    TIMESTAMP,
-    DECIMAL,
-    CheckConstraint,
 )
-from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import JSONB
-from geoalchemy2 import Geography
+from sqlalchemy.orm import relationship
+
 from database import Base
-from datetime import datetime
 
 
 class Venue(Base):
