@@ -1,4 +1,4 @@
-
+from typing import Optional
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -23,14 +23,14 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"message": "Escape Rooms API with complete schema! 🚀"}
+    return {"message": "Escape Rooms API with complete schema"}
 
 
 @app.get("/api/rooms")
 def get_rooms(
-    city: str | None = None,
-    theme: str | None = None,
-    difficulty: int | None = None,
+    city: Optional[str] = None,
+    theme: Optional[str] = None,
+    difficulty: Optional[int] = None,
     db: Session = Depends(get_db),
 ):
     query = db.query(Room).join(Venue)
@@ -54,6 +54,8 @@ def get_rooms(
                 "difficulty": room.difficulty,
                 "price": float(room.base_price) if room.base_price else None,
                 "currency": room.currency,
+                "latitude": float(room.latitude) if room.latitude else None,
+                "longitude": float(room.longitude) if room.longitude else None,
                 "city": room.venue.city if room.venue else None,
                 "venue_name": room.venue.name if room.venue else None,
             }
@@ -69,7 +71,6 @@ def get_room(room_id: int, db: Session = Depends(get_db)):
     if not room:
         raise HTTPException(status_code=404, detail="Room not found")
 
-    # Increment view count
     room.view_count += 1
     db.commit()
 
