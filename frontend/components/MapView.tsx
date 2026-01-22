@@ -70,7 +70,7 @@ export default function MapView({
     
     map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/dark-v11',
+        style: 'mapbox://styles/mapbox/light-v11',
         center: [initialLng, initialLat],
         zoom: initialZoom,
     });
