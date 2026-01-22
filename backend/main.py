@@ -6,6 +6,9 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import Room, Venue
 
+# Import the map API router
+from api.map_api import router as map_router
+
 app = FastAPI(title="Escape Rooms API")
 
 app.add_middleware(
@@ -20,10 +23,36 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include the map API router
+app.include_router(map_router)
+
 
 @app.get("/")
 def read_root():
-    return {"message": "Escape Rooms API with complete schema"}
+    return {
+        "message": "Escape Rooms API with complete schema",
+        "endpoints": {
+            "rooms_list": "/api/rooms",
+            "room_detail": "/api/rooms/{room_id}",
+            "map_search": "/api/rooms/map",
+            "themes": "/api/rooms/themes",
+            "health": "/health",
+        },
+    }
+
+
+@app.get("/health")
+def health_check():
+    """Health check endpoint"""
+    from database import engine
+    from sqlalchemy import text
+
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        return {"status": "healthy", "database": "connected"}
+    except Exception as e:
+        return {"status": "unhealthy", "database": "disconnected", "error": str(e)}
 
 
 @app.get("/api/rooms")
