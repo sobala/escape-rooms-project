@@ -17,6 +17,7 @@ app.add_middleware(
         "http://localhost:3000",
         "https://*.vercel.app",
         "https://escape-rooms-project.vercel.app",
+        "https://www.escaperoomsnearme.io",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -59,14 +60,14 @@ def health_check():
 def debug_room(room_id: int, db: Session = Depends(get_db)):
     """Debug endpoint to check room status"""
     room = db.query(Room).filter(Room.id == room_id).first()
-    
+
     if not room:
         return {
             "exists": False,
             "room_id": room_id,
-            "message": "Room does not exist in database"
+            "message": "Room does not exist in database",
         }
-    
+
     return {
         "exists": True,
         "room_id": room.id,
@@ -76,7 +77,9 @@ def debug_room(room_id: int, db: Session = Depends(get_db)):
         "venue_exists": room.venue is not None,
         "venue_active": room.venue.is_active if room.venue else None,
         "venue_name": room.venue.name if room.venue else None,
-        "can_be_accessed": room.is_published and (room.venue and room.venue.is_active) if room.venue else False
+        "can_be_accessed": room.is_published and (room.venue and room.venue.is_active)
+        if room.venue
+        else False,
     }
 
 
@@ -84,25 +87,33 @@ def debug_room(room_id: int, db: Session = Depends(get_db)):
 def debug_all_rooms(db: Session = Depends(get_db)):
     """Debug endpoint to see all rooms and their status"""
     all_rooms = db.query(Room).all()
-    
+
     rooms_info = []
     for room in all_rooms:
-        rooms_info.append({
-            "id": room.id,
-            "name": room.name,
-            "is_published": room.is_published,
-            "venue_id": room.venue_id,
-            "venue_exists": room.venue is not None,
-            "venue_active": room.venue.is_active if room.venue else None,
-            "venue_name": room.venue.name if room.venue else None,
-            "can_be_accessed": room.is_published and (room.venue and room.venue.is_active) if room.venue else False,
-            "would_appear_in_list": room.is_published and (room.venue and room.venue.is_active) if room.venue else False
-        })
-    
+        rooms_info.append(
+            {
+                "id": room.id,
+                "name": room.name,
+                "is_published": room.is_published,
+                "venue_id": room.venue_id,
+                "venue_exists": room.venue is not None,
+                "venue_active": room.venue.is_active if room.venue else None,
+                "venue_name": room.venue.name if room.venue else None,
+                "can_be_accessed": room.is_published
+                and (room.venue and room.venue.is_active)
+                if room.venue
+                else False,
+                "would_appear_in_list": room.is_published
+                and (room.venue and room.venue.is_active)
+                if room.venue
+                else False,
+            }
+        )
+
     return {
         "total_rooms": len(all_rooms),
         "accessible_rooms": sum(1 for r in rooms_info if r["can_be_accessed"]),
-        "rooms": rooms_info
+        "rooms": rooms_info,
     }
 
 
@@ -113,9 +124,10 @@ def get_rooms(
     difficulty: Optional[int] = None,
     db: Session = Depends(get_db),
 ):
-    query = db.query(Room).join(Venue).filter(
-        Room.is_published == True,
-        Venue.is_active == True
+    query = (
+        db.query(Room)
+        .join(Venue)
+        .filter(Room.is_published == True, Venue.is_active == True)
     )
 
     if city:
@@ -126,12 +138,12 @@ def get_rooms(
         query = query.filter(Room.difficulty == difficulty)
 
     rooms = query.all()
-    
+
     # Debug: Log what room IDs are being returned
     room_ids = [r.id for r in rooms]
     print(f"\n📋 /api/rooms: Returning {len(rooms)} rooms")
     print(f"📋 Room IDs being returned: {room_ids}")
-    
+
     # Also check what room IDs exist in DB (regardless of filters)
     all_room_ids = [r[0] for r in db.query(Room.id).all()]
     print(f"📊 Total rooms in database: {len(all_room_ids)}")
@@ -160,34 +172,30 @@ def get_rooms(
 @app.get("/api/rooms/{room_id}")
 def get_room(room_id: int, db: Session = Depends(get_db)):
     print(f"\n🔍 DEBUG: Fetching room {room_id}")
-    
+
     # Use the SAME query logic as /api/rooms to ensure consistency
     # This ensures any room shown in the list can be accessed by ID
     room = (
         db.query(Room)
         .join(Venue)
-        .filter(
-            Room.id == room_id,
-            Room.is_published == True,
-            Venue.is_active == True
-        )
+        .filter(Room.id == room_id, Room.is_published == True, Venue.is_active == True)
         .first()
     )
-    
+
     if not room:
         # Check if room exists at all (for better error messages)
         room_exists = db.query(Room).filter(Room.id == room_id).first()
-        
+
         if not room_exists:
             all_room_ids = [r[0] for r in db.query(Room.id).all()]
             print(f"❌ Room {room_id} NOT FOUND in database")
             print(f"📊 Total rooms in DB: {len(all_room_ids)}")
             print(f"📋 All room IDs: {all_room_ids}")
             raise HTTPException(
-                status_code=404, 
-                detail=f"Room with ID {room_id} does not exist in database. Total rooms: {len(all_room_ids)}, IDs: {all_room_ids[:10]}"
+                status_code=404,
+                detail=f"Room with ID {room_id} does not exist in database. Total rooms: {len(all_room_ids)}, IDs: {all_room_ids[:10]}",
             )
-        
+
         # Room exists but doesn't meet the criteria
         issues = []
         if not room_exists.is_published:
@@ -196,14 +204,16 @@ def get_room(room_id: int, db: Session = Depends(get_db)):
             issues.append("no venue")
         elif not room_exists.venue.is_active:
             issues.append("venue not active")
-        
+
         print(f"⚠️ Room {room_id} exists but: {', '.join(issues)}")
         raise HTTPException(
-            status_code=404, 
-            detail=f"Room with ID {room_id} exists but cannot be accessed: {', '.join(issues)}"
+            status_code=404,
+            detail=f"Room with ID {room_id} exists but cannot be accessed: {', '.join(issues)}",
         )
-    
-    print(f"✅ Room {room_id} FOUND: name='{room.name}', published={room.is_published}, venue='{room.venue.name if room.venue else None}'")
+
+    print(
+        f"✅ Room {room_id} FOUND: name='{room.name}', published={room.is_published}, venue='{room.venue.name if room.venue else None}'"
+    )
     print(f"✅ Room {room_id} is accessible - returning data")
 
     room.view_count += 1
