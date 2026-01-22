@@ -130,6 +130,12 @@ export default function MapView({ rooms }: MapViewProps) {
     offsetRooms.forEach((room) => {
       if (!room.latitude || !room.longitude) return;
 
+      // Ensure room has valid ID before creating marker
+      if (!room.id) {
+        console.warn('Room missing ID, skipping marker:', room);
+        return;
+      }
+
       const el = document.createElement('div');
       el.className = 'custom-marker';
       el.style.width = '30px';  // Smaller pins
@@ -167,25 +173,36 @@ export default function MapView({ rooms }: MapViewProps) {
         </div>
         `;
 
+      const roomId = room.id;
+      console.log('📍 Creating marker for room:', {
+        id: roomId,
+        name: room.name,
+        fullRoom: room
+      });
+      
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
         <div style="padding: 12px; min-width: 220px;">
             <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold;">
-            ${room.name}
+            ${room.name || 'Unknown Room'}
             </h3>
             <p style="margin: 4px 0; color: #666; font-size: 13px;">
-            📍 ${room.venue_name}
+            📍 ${room.venue_name || 'Unknown Venue'}
             </p>
             <p style="margin: 4px 0; font-size: 13px;">
-            <strong>Theme:</strong> ${room.theme}
+            <strong>Theme:</strong> ${room.theme || 'N/A'}
             </p>
             <p style="margin: 4px 0; font-size: 13px;">
-            <strong>Difficulty:</strong> ${room.difficulty}/5
+            <strong>Difficulty:</strong> ${room.difficulty || '?'}/5
             </p>
             <p style="margin: 4px 0; font-size: 13px;">
-            <strong>Price:</strong> £${room.price}
+            <strong>Price:</strong> £${room.price || 'N/A'}
+            </p>
+            <p style="margin: 4px 0; font-size: 11px; color: #999;">
+            Room ID: ${roomId}
             </p>
             <button 
-            onclick="window.location.href='/rooms/${room.id}'"
+            id="room-detail-btn-${roomId}"
+            onclick="console.log('🔘 Clicking View Details for room ID:', ${roomId}); window.location.href='/rooms/${roomId}'"
             style="
                 width: 100%;
                 margin-top: 12px;

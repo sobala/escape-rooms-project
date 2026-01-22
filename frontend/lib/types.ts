@@ -72,3 +72,24 @@ export interface HealthResponse {
   database: 'connected' | 'disconnected';
   error?: string;
 }
+
+export interface RoomDetail {
+  id: number;
+  name: string;
+  description: string | null;
+  theme: string | null;
+  difficulty: number | null;
+  min_players: number | null;
+  max_players: number | null;
+  duration_minutes: number | null;
+  price: number | null;
+  currency: string | null;
+  success_rate: number | null;
+  venue: {
+    name: string;
+    city: string;
+    address: string | null;
+    phone: string | null;
+    website: string | null;
+  } | null;
+}

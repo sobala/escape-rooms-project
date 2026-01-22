@@ -316,7 +316,7 @@ async def get_themes():
 # ============================================================================
 
 
-@router.get("/{slug}", response_model=RoomResponse)
+@router.get("/slug/{slug}", response_model=RoomResponse)
 async def get_room_by_slug(
     slug: str,
     # db: Session = Depends(get_db)

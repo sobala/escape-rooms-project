@@ -26,11 +26,13 @@ export default function MapPage() {
     fetch(`${API_URL}/api/rooms`)
       .then(res => res.json())
       .then(data => {
+        console.log('Loaded rooms from API:', data.rooms.length);
+        console.log('Room IDs:', data.rooms.map((r: Room) => r.id));
         setRooms(data.rooms);
         setLoading(false);
       })
       .catch(error => {
-        console.error('Error:', error);
+        console.error('Error loading rooms:', error);
         setLoading(false);
       });
   }, []);

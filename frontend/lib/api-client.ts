@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import type { Room, MapResponse, MapFilters, ThemesResponse } from './types';
+import type { Room, MapResponse, MapFilters, ThemesResponse, RoomDetail } from './types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -42,6 +42,26 @@ export async function fetchRoomBySlug(slug: string): Promise<Room> {
   }
   
   return response.json();
+}
+
+export async function fetchRoomById(id: number): Promise<RoomDetail> {
+  const url = `${API_BASE_URL}/api/rooms/${id}`;
+  console.log('Fetching room from:', url);
+  
+  const response = await fetch(url);
+  
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('API Error:', response.status, errorText);
+    if (response.status === 404) {
+      throw new Error('Room not found');
+    }
+    throw new Error(`Failed to fetch room: ${response.statusText}`);
+  }
+  
+  const data = await response.json();
+  console.log('Room data received:', data);
+  return data;
 }
 
 export async function fetchThemes(): Promise<string[]> {
@@ -158,6 +178,59 @@ export function useRoom(slug: string | null) {
       isMounted = false;
     };
   }, [slug]);
+  
+  return { room, loading, error };
+}
+
+/**
+ * Hook to fetch a single room by ID
+ */
+export function useRoomById(id: number | null) {
+  const [room, setRoom] = useState<RoomDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  useEffect(() => {
+    if (!id) {
+      setRoom(null);
+      setLoading(false);
+      return;
+    }
+    
+    let isMounted = true;
+    
+    async function loadRoom() {
+      try {
+        setLoading(true);
+        setError(null);
+        console.log('Loading room with ID:', id);
+        const data = await fetchRoomById(id as number);
+        
+        if (isMounted) {
+          setRoom(data);
+          
+          // Track view
+          trackRoomView(data.id).catch(console.error);
+        }
+      } catch (err) {
+        console.error('Error loading room:', err);
+        if (isMounted) {
+          const errorMessage = err instanceof Error ? err.message : 'Failed to load room';
+          setError(errorMessage);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    }
+    
+    loadRoom();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
   
   return { room, loading, error };
 }
