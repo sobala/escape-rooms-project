@@ -37,30 +37,56 @@ export default function RoomCard({ room }: { room: RoomCardData }) {
 
   return (
     <article
-      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--warm-gray)]/10 transition-all duration-300 hover:border-[var(--warm-gray)]/20"
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--warm-gray)]/20 transition-all duration-300 hover:border-[var(--warm-gray)]/30 hover:-translate-y-0.5 hover:shadow-lg"
       style={{
-        backgroundColor: '#faf8f5',
-        boxShadow: '0 4px 20px rgba(45,42,38,0.06)',
+        backgroundColor: '#e2dfd4',
+        boxShadow:
+          'inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 8px rgba(0,0,0,0.06), 0 12px 40px rgba(45,80,22,0.14)',
       }}
     >
       <Link href={`/rooms/${room.id}`} className="flex min-h-0 flex-1 flex-col">
-        {/* 16:9 image area - warm, inviting placeholder */}
-        <div className="relative aspect-video shrink-0 overflow-hidden">
+        {/* 16:9 image area - moody, depth, vignette */}
+        <div className="relative aspect-video shrink-0 overflow-hidden rounded-t-2xl">
+          {/* Base: deep forest tone with subtle warm glow (candlelit) */}
           <div
             className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
             style={{
-              backgroundImage: `linear-gradient(135deg, rgba(212,163,115,0.22) 0%, rgba(132,169,140,0.18) 50%, rgba(107,78,113,0.12) 100%), linear-gradient(180deg, rgba(250,248,245,0.15) 0%, rgba(45,42,38,0.25) 100%), url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2384a98c' fill-opacity='0.08'%3E%3Cpath d='M0 0h30v30H0V0zm30 30h30v30H30V30z'/%3E%3C/g%3E%3C/svg%3E")`,
+              background:
+                'linear-gradient(180deg, rgba(30,45,25,0.5) 0%, rgba(20,35,18,0.7) 40%, rgba(15,25,12,0.85) 100%)',
             }}
           />
-          <div className="absolute inset-0 ring-1 ring-inset ring-black/5" />
-          {/* Minimal difficulty badge */}
+          {/* Warm glow from center-bottom (mysterious light source) */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 70% 60% at 50% 85%, rgba(201,166,107,0.18) 0%, transparent 50%), radial-gradient(ellipse 100% 80% at 50% 50%, rgba(45,80,22,0.2) 0%, transparent 60%)',
+            }}
+          />
+          {/* Vignette - darken edges for depth and mystery */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, rgba(0,0,0,0.25) 80%, rgba(0,0,0,0.45) 100%)',
+            }}
+          />
+          {/* Inner shadow at bottom - recessed feel */}
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
+            style={{
+              background: 'linear-gradient(to top, rgba(0,0,0,0.15), transparent)',
+            }}
+          />
+          <div className="absolute inset-0 ring-1 ring-inset ring-black/10" />
+          {/* Difficulty badge - pops from dark background */}
           <div className="absolute top-3 left-3">
             <span
               className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
               style={{
                 backgroundColor: difficultyStyle.bg,
                 color: difficultyStyle.text,
-                boxShadow: '0 1px 6px rgba(0,0,0,0.08)',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2)',
               }}
             >
               {difficultyStyle.label}
@@ -68,17 +94,22 @@ export default function RoomCard({ room }: { room: RoomCardData }) {
           </div>
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col p-6">
-          {/* Room title: 1–2 lines */}
-          <h3 className="font-serif text-xl font-semibold leading-tight text-[var(--foreground)] transition-colors group-hover:text-[var(--accent)] line-clamp-2">
+        <div
+          className="flex min-h-0 flex-1 flex-col p-6"
+          style={{
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4)',
+          }}
+        >
+          {/* Room title - deep olive for weight */}
+          <h3 className="font-serif text-xl font-semibold leading-tight text-[var(--foreground)] transition-colors group-hover:text-[var(--accent)] line-clamp-2" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.5)' }}>
             {room.name}
           </h3>
-          {/* Venue: fixed 2 lines of space; short names leave second line empty */}
+          {/* Venue: fixed 2 lines of space */}
           <p className="mt-1.5 min-h-[2.5rem] line-clamp-2 text-sm leading-tight text-[var(--warm-gray)]">
             {room.venue_name || '\u00A0'}
           </p>
           {room.theme && (
-            <span className="mt-3 self-start inline-block rounded-full border border-[var(--warm-gray)]/20 px-3 py-1 text-xs font-medium text-[var(--warm-gray)]">
+            <span className="mt-3 self-start inline-block rounded-full border border-[var(--warm-gray)]/25 px-3 py-1 text-xs font-medium text-[var(--warm-gray)]">
               {room.theme}
             </span>
           )}
@@ -88,10 +119,10 @@ export default function RoomCard({ room }: { room: RoomCardData }) {
               <span className="ml-1 font-normal text-[var(--warm-gray)] text-sm">/ person</span>
             </span>
             <span
-              className="inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 group-hover:shadow-md"
+              className="inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 group-hover:shadow-lg"
               style={{
                 backgroundColor: 'var(--accent)',
-                boxShadow: '0 2px 10px rgba(45,107,90,0.25)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 10px rgba(63,95,74,0.3)',
               }}
             >
               Discover

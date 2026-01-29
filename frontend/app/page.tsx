@@ -72,26 +72,26 @@ export default function Home() {
     <div className="min-h-screen bg-[var(--cream)]">
       <SiteHeader />
 
-      {/* Hero - deep forest green/slate, organic textures, soft lighting */}
+      {/* Hero - warm forest green, blends with cream/earth vibe */}
       <section
         className="relative flex min-h-[75vh] items-center justify-center overflow-hidden transition-opacity duration-700 ease-out"
         style={{
-          background: 'linear-gradient(145deg, #1e3a2e 0%, #2f4858 50%, #1e3a2e 100%)',
+          background: 'linear-gradient(160deg, #1e3a2e 0%, #2a4728 35%, #355a2a 65%, #1e3a2e 100%)',
         }}
       >
         {/* Subtle organic texture overlay */}
         <div
-          className="absolute inset-0 opacity-[0.07]"
+          className="absolute inset-0 opacity-[0.06]"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
           }}
         />
-        {/* Soft atmospheric lighting */}
+        {/* Warm atmospheric lighting - cream/gold, no blue */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 90% 60% at 50% 10%, rgba(245,241,232,0.12) 0%, transparent 50%), radial-gradient(ellipse 70% 50% at 80% 90%, rgba(59,130,246,0.08) 0%, transparent 45%), linear-gradient(180deg, transparent 0%, rgba(30,58,46,0.4) 100%)',
+              'radial-gradient(ellipse 85% 55% at 50% 15%, rgba(248,244,237,0.14) 0%, transparent 50%), radial-gradient(ellipse 60% 45% at 75% 85%, rgba(212,180,120,0.08) 0%, transparent 45%), linear-gradient(180deg, transparent 0%, rgba(30,58,46,0.35) 100%)',
           }}
         />
 
@@ -111,10 +111,10 @@ export default function Home() {
           <div className="animate-hero-3 mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/map"
-              className="inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
+              className="inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/50"
               style={{
-                backgroundColor: 'var(--accent)',
-                boxShadow: '0 4px 24px rgba(45,107,90,0.35), 0 2px 8px rgba(0,0,0,0.1)',
+                backgroundColor: 'var(--gold)',
+                boxShadow: 'var(--glow-gold), 0 2px 8px rgba(0,0,0,0.1)',
               }}
             >
               Explore Map
@@ -133,7 +133,7 @@ export default function Home() {
       {/* Filter pills - warm neutral bg, organic rounded, natural palette */}
       <section
         className="border-y border-[var(--warm-gray)]/12 transition-colors duration-300"
-        style={{ backgroundColor: '#f5f1e8' }}
+        style={{ backgroundColor: 'var(--warm-taupe)' }}
       >
         <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
@@ -263,7 +263,7 @@ export default function Home() {
       {/* Footer CTA - warm slice */}
       <section
         className="border-t border-[var(--warm-gray)]/12"
-        style={{ backgroundColor: '#f5f1e8' }}
+        style={{ backgroundColor: 'var(--warm-taupe)' }}
       >
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -278,7 +278,7 @@ export default function Home() {
               className="mt-8 inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:opacity-90"
               style={{
                 backgroundColor: 'var(--accent)',
-                boxShadow: '0 4px 20px rgba(45,107,90,0.3)',
+                boxShadow: '0 4px 20px rgba(63,95,74,0.3)',
               }}
             >
               Open map

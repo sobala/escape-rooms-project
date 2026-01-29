@@ -207,7 +207,7 @@ export default function MapView({ rooms }: MapViewProps) {
                 width: 100%;
                 margin-top: 12px;
                 padding: 8px 16px;
-                background: #2d6b5a;
+                background: #c9a66b;
                 color: white;
                 border: none;
                 border-radius: 8px;
@@ -215,8 +215,8 @@ export default function MapView({ rooms }: MapViewProps) {
                 font-weight: 600;
                 cursor: pointer;
             "
-            onmouseover="this.style.background='#245a4a'"
-            onmouseout="this.style.background='#2d6b5a'"
+            onmouseover="this.style.background='#b8945a'"
+            onmouseout="this.style.background='#c9a66b'"
             >
             View Details
             </button>
@@ -261,7 +261,7 @@ export default function MapView({ rooms }: MapViewProps) {
       {/* Filter Panel - warm style to match site */}
       <div
         className="absolute top-4 left-4 z-10 max-w-sm rounded-2xl shadow-lg border border-[var(--warm-gray)]/15"
-        style={{ backgroundColor: '#faf8f5', boxShadow: '0 8px 32px rgba(45,42,38,0.12)' }}
+        style={{ backgroundColor: 'var(--card-bg)', boxShadow: 'var(--shadow-card)' }}
       >
         <div className="flex items-center justify-between border-b border-[var(--warm-gray)]/12 p-4">
           <h2 className="font-serif text-lg font-semibold text-[var(--foreground)]">
@@ -327,9 +327,9 @@ export default function MapView({ rooms }: MapViewProps) {
         <div
           className="absolute bottom-4 left-1/2 z-10 mx-4 w-full max-w-md -translate-x-1/2 rounded-2xl border shadow-lg"
           style={{
-            backgroundColor: '#faf8f5',
+            backgroundColor: 'var(--card-bg)',
             borderColor: 'rgba(107,101,96,0.2)',
-            boxShadow: '0 8px 32px rgba(45,42,38,0.12)',
+            boxShadow: 'var(--shadow-card)',
           }}
         />
       )}
@@ -338,9 +338,9 @@ export default function MapView({ rooms }: MapViewProps) {
       <div
         className="absolute bottom-4 right-4 z-10 rounded-2xl border p-4 shadow-lg"
         style={{
-          backgroundColor: '#faf8f5',
+          backgroundColor: 'var(--card-bg)',
           borderColor: 'rgba(107,101,96,0.15)',
-          boxShadow: '0 8px 32px rgba(45,42,38,0.12)',
+          boxShadow: 'var(--shadow-card)',
         }}
       >
         <h4 className="mb-2 font-serif text-sm font-semibold text-[var(--foreground)]">Difficulty</h4>

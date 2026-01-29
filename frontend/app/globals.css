@@ -4,20 +4,28 @@
   --background: #faf8f5;
   --foreground: #2d2a26;
   --hero-bg: #1e3a2e;
-  --hero-bg-alt: #2f4858;
+  --hero-bg-alt: #1e3a2e;
+  --forest-deep: #2d5016;
   --cream: #faf8f5;
   --cream-heading: #f5f1e8;
   --warm-neutral: #f5f1e8;
+  --warm-taupe: #e8e3da;
   --warm-gray: #6b6560;
+  --deep-olive: #3d4a2e;
   --sage: #84a98c;
   --amber: #d4a373;
   --terracotta: #c1666b;
   --plum: #6b4e71;
-  --accent: #2d6b5a;
-  --accent-hover: #245a4a;
-  --card-bg: #faf8f5;
+  --gold: #c9a66b;
+  --gold-hover: #b8945a;
+  --accent: #3F5F4A;
+  --accent-hover: #354f42;
+  --card-bg: #d9d7cd;
   --shadow-soft: 0 4px 20px rgba(45, 42, 38, 0.06);
   --shadow-card: 0 8px 32px rgba(45, 42, 38, 0.08);
+  --shadow-inner: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+  --glow-gold: 0 4px 24px rgba(201, 166, 107, 0.35);
+  --radius: 24px;
 }
 
 @theme inline {

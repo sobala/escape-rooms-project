@@ -59,7 +59,7 @@ export default function RoomDetailPage() {
           <p className="mt-4 text-[var(--warm-gray)]">The room ID in the URL is invalid.</p>
           <Link
             href="/map"
-            className="mt-8 rounded-full bg-[var(--accent)] px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"
+            className="mt-8 rounded-full bg-[var(--gold)] px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"
           >
             Back to Map
           </Link>
@@ -96,7 +96,7 @@ export default function RoomDetailPage() {
           </div>
           <Link
             href="/map"
-            className="mt-8 inline-block rounded-full bg-[var(--accent)] px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"
+            className="mt-8 inline-block rounded-full bg-[var(--gold)] px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"
           >
             Back to Map
           </Link>
@@ -147,7 +147,7 @@ export default function RoomDetailPage() {
           {/* Hero */}
           <div
             className="p-8 text-white sm:p-10"
-            style={{ background: 'linear-gradient(135deg, #2d6b5a 0%, #1e3a2e 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #3F5F4A 0%, #1e3a2e 100%)' }}
           >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
@@ -319,7 +319,7 @@ export default function RoomDetailPage() {
                     href={room.venue.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-6 flex w-full items-center justify-center rounded-full bg-[var(--accent)] py-4 px-6 font-semibold text-white transition-opacity hover:opacity-90"
+                    className="mt-6 flex w-full items-center justify-center rounded-full bg-[var(--gold)] py-4 px-6 font-semibold text-white transition-opacity hover:opacity-90"
                   >
                     Book Now →
                   </a>

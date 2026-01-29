@@ -158,7 +158,7 @@ export default function BrowsePage() {
         {/* Filters - warm panel */}
         <div
           className="mb-8 rounded-2xl border border-[var(--warm-gray)]/12 p-5 sm:p-6"
-          style={{ backgroundColor: '#f5f1e8', boxShadow: 'var(--shadow-soft)' }}
+          style={{ backgroundColor: 'var(--warm-taupe)', boxShadow: 'var(--shadow-soft)' }}
         >
           <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[var(--warm-gray)]">
             Filters
@@ -265,7 +265,7 @@ export default function BrowsePage() {
                 <p className="mt-2 text-sm text-[var(--warm-gray)]/80">API: {API_URL}/api/rooms</p>
                 <button
                   onClick={loadRooms}
-                  className="mt-4 rounded-full bg-[var(--accent)] px-5 py-2.5 font-semibold text-white shadow-sm hover:opacity-90"
+                  className="mt-4 rounded-full bg-[var(--gold)] px-5 py-2.5 font-semibold text-white shadow-sm hover:opacity-90"
                 >
                   Retry
                 </button>
@@ -289,7 +289,7 @@ export default function BrowsePage() {
                 <p className="mt-2 text-sm text-[var(--warm-gray)]/80">Make sure the backend is running at {API_URL}</p>
                 <button
                   onClick={loadRooms}
-                  className="mt-4 rounded-full bg-[var(--accent)] px-5 py-2.5 font-semibold text-white shadow-sm hover:opacity-90"
+                  className="mt-4 rounded-full bg-[var(--gold)] px-5 py-2.5 font-semibold text-white shadow-sm hover:opacity-90"
                 >
                   Retry
                 </button>
