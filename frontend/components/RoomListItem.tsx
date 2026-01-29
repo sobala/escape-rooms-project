@@ -33,13 +33,22 @@ export default function RoomListItem({ room }: { room: RoomCardData }) {
         boxShadow: '0 4px 20px rgba(45,42,38,0.06)',
       }}
     >
-      <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-xl sm:h-24 sm:w-32">
-        <div
-          className="absolute inset-0 transition-transform duration-300 group-hover:scale-105"
-          style={{
-            backgroundImage: `linear-gradient(135deg, rgba(212,163,115,0.25) 0%, rgba(132,169,140,0.2) 100%)`,
-          }}
-        />
+      <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-xl bg-[var(--warm-gray)]/15 sm:h-24 sm:w-32">
+        {room.primary_image_url ? (
+          <img
+            src={room.primary_image_url}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+          />
+        ) : (
+          <div
+            className="absolute inset-0 transition-transform duration-300 group-hover:scale-105"
+            style={{
+              backgroundImage: `linear-gradient(135deg, rgba(212,163,115,0.25) 0%, rgba(132,169,140,0.2) 100%)`,
+            }}
+          />
+        )}
         <div className="absolute top-1.5 left-1.5">
           <span
             className="inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium"

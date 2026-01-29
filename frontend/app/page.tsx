@@ -25,6 +25,7 @@ function mapApiRoomToCard(room: {
   currency?: string | null;
   venue_name?: string | null;
   city?: string | null;
+  primary_image_url?: string | null;
 }): RoomCardData {
   return {
     id: room.id,
@@ -35,6 +36,7 @@ function mapApiRoomToCard(room: {
     currency: room.currency ?? null,
     venue_name: room.venue_name ?? null,
     city: room.city ?? null,
+    primary_image_url: room.primary_image_url ?? null,
   };
 }
 

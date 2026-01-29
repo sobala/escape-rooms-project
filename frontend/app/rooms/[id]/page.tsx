@@ -144,29 +144,56 @@ export default function RoomDetailPage() {
           className="overflow-hidden rounded-2xl border border-[var(--warm-gray)]/10"
           style={{ boxShadow: '0 8px 32px rgba(45,42,38,0.08)' }}
         >
-          {/* Hero */}
-          <div
-            className="p-8 text-white sm:p-10"
-            style={{ background: 'linear-gradient(135deg, #f1efe6 0%, #f3efe6 50%, #f0eee5 100%)' }}
-          >
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <h1 className="font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
-                  {room.name}
-                </h1>
-                {room.theme && (
-                  <span
-                    className="mt-3 inline-block rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur-sm"
-                  >
-                    {room.theme}
-                  </span>
-                )}
-                {room.venue && (
-                  <p className="mt-4 text-[#e8e4dc]">
-                    {room.venue.name} · {room.venue.city}
-                  </p>
-                )}
-              </div>
+          {/* Hero - image or gradient */}
+          <div className="relative min-h-[12rem] sm:min-h-[14rem]">
+            {room.primary_image_url ? (
+              <>
+                <img
+                  src={room.primary_image_url}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%)',
+                  }}
+                />
+              </>
+            ) : (
+              <div
+                className="absolute inset-0"
+                style={{ background: 'linear-gradient(135deg, #f1efe6 0%, #f3efe6 50%, #f0eee5 100%)' }}
+              />
+            )}
+            <div className="relative p-8 sm:p-10">
+              <h1
+                className={`font-serif text-3xl font-semibold tracking-tight sm:text-4xl ${
+                  room.primary_image_url ? 'text-white drop-shadow-md' : 'text-[var(--foreground)]'
+                }`}
+              >
+                {room.name}
+              </h1>
+              {room.theme && (
+                <span
+                  className={`mt-3 inline-block rounded-full px-4 py-1.5 text-sm font-medium backdrop-blur-sm ${
+                    room.primary_image_url
+                      ? 'border border-white/40 bg-white/20 text-white'
+                      : 'border border-[var(--warm-gray)]/30 bg-white/80 text-[var(--foreground)]'
+                  }`}
+                >
+                  {room.theme}
+                </span>
+              )}
+              {room.venue && (
+                <p
+                  className={`mt-4 ${
+                    room.primary_image_url ? 'text-white/95' : 'text-[var(--warm-gray)]'
+                  }`}
+                >
+                  {room.venue.name} · {room.venue.city}
+                </p>
+              )}
             </div>
           </div>
 

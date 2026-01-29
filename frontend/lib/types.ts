@@ -85,6 +85,8 @@ export interface RoomDetail {
   price: number | null;
   currency: string | null;
   success_rate: number | null;
+  primary_image_url: string | null;
+  image_urls: string[];
   venue: {
     name: string;
     city: string;

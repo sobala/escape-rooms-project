@@ -11,6 +11,7 @@ export interface RoomCardData {
   currency: string | null;
   venue_name: string | null;
   city: string | null;
+  primary_image_url?: string | null;
 }
 
 const DIFFICULTY_CONFIG = [
@@ -45,39 +46,57 @@ export default function RoomCard({ room }: { room: RoomCardData }) {
       }}
     >
       <Link href={`/rooms/${room.id}`} className="flex min-h-0 flex-1 flex-col">
-        {/* 16:9 image area - moody, depth, vignette */}
-        <div className="relative aspect-video shrink-0 overflow-hidden rounded-t-2xl">
-          {/* Base: deep forest tone with subtle warm glow (candlelit) */}
-          <div
-            className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-            style={{
-              background:
-                'linear-gradient(180deg, rgba(30,45,25,0.5) 0%, rgba(20,35,18,0.7) 40%, rgba(15,25,12,0.85) 100%)',
-            }}
-          />
-          {/* Warm glow from center-bottom (mysterious light source) */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'radial-gradient(ellipse 70% 60% at 50% 85%, rgba(201,166,107,0.18) 0%, transparent 50%), radial-gradient(ellipse 100% 80% at 50% 50%, rgba(45,80,22,0.2) 0%, transparent 60%)',
-            }}
-          />
-          {/* Vignette - darken edges for depth and mystery */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, rgba(0,0,0,0.25) 80%, rgba(0,0,0,0.45) 100%)',
-            }}
-          />
-          {/* Inner shadow at bottom - recessed feel */}
-          <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
-            style={{
-              background: 'linear-gradient(to top, rgba(0,0,0,0.15), transparent)',
-            }}
-          />
+        {/* 16:9 image area - photo or placeholder */}
+        <div className="relative aspect-video shrink-0 overflow-hidden rounded-t-2xl bg-[var(--warm-gray)]/20">
+          {room.primary_image_url ? (
+            <>
+              <img
+                src={room.primary_image_url}
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+              {/* Overlay for depth and text contrast */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    'linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%), radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, rgba(0,0,0,0.2) 100%)',
+                }}
+              />
+            </>
+          ) : (
+            <>
+              <div
+                className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
+                style={{
+                  background:
+                    'linear-gradient(180deg, rgba(30,45,25,0.5) 0%, rgba(20,35,18,0.7) 40%, rgba(15,25,12,0.85) 100%)',
+                }}
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    'radial-gradient(ellipse 70% 60% at 50% 85%, rgba(201,166,107,0.18) 0%, transparent 50%), radial-gradient(ellipse 100% 80% at 50% 50%, rgba(45,80,22,0.2) 0%, transparent 60%)',
+                }}
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    'radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, rgba(0,0,0,0.25) 80%, rgba(0,0,0,0.45) 100%)',
+                }}
+              />
+              <div
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
+                style={{
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.15), transparent)',
+                }}
+              />
+            </>
+          )}
           <div className="absolute inset-0 ring-1 ring-inset ring-black/10" />
           {/* Difficulty badge - pops from dark background */}
           <div className="absolute top-3 left-3">

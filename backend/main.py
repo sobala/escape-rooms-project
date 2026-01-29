@@ -163,6 +163,8 @@ def get_rooms(
                 "longitude": float(room.longitude) if room.longitude else None,
                 "city": room.venue.city if room.venue else None,
                 "venue_name": room.venue.name if room.venue else None,
+                "primary_image_url": room.primary_image_url,
+                "image_urls": room.image_urls or [],
             }
         )
 
@@ -231,6 +233,8 @@ def get_room(room_id: int, db: Session = Depends(get_db)):
         "price": float(room.base_price) if room.base_price else None,
         "currency": room.currency,
         "success_rate": float(room.success_rate) if room.success_rate else None,
+        "primary_image_url": room.primary_image_url,
+        "image_urls": room.image_urls or [],
         "venue": {
             "name": room.venue.name,
             "city": room.venue.city,
