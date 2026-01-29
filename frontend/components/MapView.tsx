@@ -100,7 +100,7 @@ export default function MapView({ rooms }: MapViewProps) {
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
+      style: 'mapbox://styles/mapbox/dark-v11',
       center: [-0.1276, 51.5074],
       zoom: 11
     });
@@ -259,14 +259,14 @@ export default function MapView({ rooms }: MapViewProps) {
       />
       
       {/* Filter Panel */}
-      <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg z-10 max-w-sm">
-        <div className="p-4 border-b flex items-center justify-between">
-          <h2 className="text-lg font-bold">
+      <div className="absolute top-4 left-4 bg-[#374151] rounded-lg shadow-xl border border-white/10 z-10 max-w-sm">
+        <div className="p-4 border-b border-white/10 flex items-center justify-between">
+          <h2 className="text-lg font-bold text-white">
             {filteredRooms.length} Rooms
           </h2>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+            className="px-3 py-1.5 bg-[#3b82f6] text-white text-sm font-medium rounded-lg hover:bg-blue-500"
           >
             {showFilters ? 'Hide' : 'Filters'}
           </button>
@@ -274,13 +274,12 @@ export default function MapView({ rooms }: MapViewProps) {
         
         {showFilters && (
           <div className="p-4 space-y-4">
-            {/* Theme Filter */}
             <div>
-              <label className="block text-sm font-medium mb-2">Theme</label>
+              <label className="block text-sm font-medium mb-2 text-gray-300">Theme</label>
               <select
                 value={themeFilter}
                 onChange={(e) => setThemeFilter(e.target.value)}
-                className="w-full px-3 py-2 border rounded text-sm"
+                className="w-full px-3 py-2 bg-gray-600/50 border border-white/10 rounded-lg text-sm text-white focus:ring-2 focus:ring-[#3b82f6]"
               >
                 <option value="">All Themes</option>
                 {uniqueThemes.map(theme => (
@@ -289,13 +288,12 @@ export default function MapView({ rooms }: MapViewProps) {
               </select>
             </div>
             
-            {/* Difficulty Filter */}
             <div>
-              <label className="block text-sm font-medium mb-2">Difficulty</label>
+              <label className="block text-sm font-medium mb-2 text-gray-300">Difficulty</label>
               <select
                 value={difficultyFilter}
                 onChange={(e) => setDifficultyFilter(e.target.value)}
-                className="w-full px-3 py-2 border rounded text-sm"
+                className="w-full px-3 py-2 bg-gray-600/50 border border-white/10 rounded-lg text-sm text-white focus:ring-2 focus:ring-[#3b82f6]"
               >
                 <option value="">All Difficulties</option>
                 <option value="1">1 - Very Easy</option>
@@ -311,7 +309,7 @@ export default function MapView({ rooms }: MapViewProps) {
                 setThemeFilter('');
                 setDifficultyFilter('');
               }}
-              className="w-full px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded hover:bg-gray-300"
+              className="w-full px-4 py-2 bg-white/10 text-gray-300 text-sm rounded-lg hover:bg-white/15 border border-white/10"
             >
               Clear Filters
             </button>
@@ -321,22 +319,22 @@ export default function MapView({ rooms }: MapViewProps) {
       
       {/* Selected Room Card */}
       {selectedRoom && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white rounded-lg shadow-xl z-10 max-w-md w-full mx-4">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[#374151] rounded-lg shadow-xl border border-white/10 z-10 max-w-md w-full mx-4">
           
           
         </div>
       )}
       
       {/* Legend */}
-      <div className="absolute bottom-4 right-4 bg-white p-4 rounded-lg shadow-lg">
-        <h4 className="font-bold mb-2 text-sm">Difficulty</h4>
-        <div className="space-y-1 text-xs">
+      <div className="absolute bottom-4 right-4 bg-[#374151] p-4 rounded-lg shadow-xl border border-white/10">
+        <h4 className="font-bold mb-2 text-sm text-white">Difficulty</h4>
+        <div className="space-y-1.5 text-xs text-gray-300">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-green-500"></div>
+            <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
             <span>Easy (1-2)</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-yellow-500"></div>
+            <div className="w-4 h-4 rounded-full bg-amber-500"></div>
             <span>Medium (3)</span>
           </div>
           <div className="flex items-center gap-2">
@@ -344,7 +342,7 @@ export default function MapView({ rooms }: MapViewProps) {
             <span>Hard (4)</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-purple-600"></div>
+            <div className="w-4 h-4 rounded-full bg-violet-600"></div>
             <span>Expert (5)</span>
           </div>
         </div>

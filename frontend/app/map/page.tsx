@@ -39,17 +39,17 @@ export default function MapPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl">Loading map...</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#0f172a]">
+        <p className="text-xl text-gray-300">Loading map...</p>
       </div>
     );
   }
 
   return (
-    <main className="h-screen flex flex-col">
-      <div className="p-4 bg-white border-b">
-        <h1 className="text-2xl font-bold">Escape Rooms Map</h1>
-        <p className="text-gray-600">
+    <main className="h-screen flex flex-col bg-[#0f172a]">
+      <div className="p-4 bg-[#0f172a] border-b border-white/10">
+        <h1 className="text-2xl font-bold text-white">Escape Rooms Map</h1>
+        <p className="text-gray-400">
           {rooms.length} rooms across London
         </p>
       </div>
