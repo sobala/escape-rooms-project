@@ -35,7 +35,7 @@ export default function MapPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen flex-col bg-[var(--cream)]">
+      <div className="flex min-h-screen flex-col bg-[var(--background)]">
         <SiteHeader />
         <div className="flex flex-1 items-center justify-center">
           <p className="font-serif text-xl text-[var(--warm-gray)]">Loading map...</p>
@@ -45,11 +45,11 @@ export default function MapPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col bg-[var(--cream)]">
+    <main className="flex min-h-screen flex-col bg-[var(--background)]">
       <SiteHeader />
       <div
         className="border-b border-[var(--warm-gray)]/12 px-4 py-4 sm:px-6 lg:px-8"
-        style={{ backgroundColor: 'var(--cream)' }}
+        style={{ backgroundColor: 'var(--cream-white)' }}
       >
         <h1 className="font-serif text-2xl font-semibold tracking-tight text-[var(--foreground)]">
           Escape Rooms Map

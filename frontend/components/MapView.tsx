@@ -261,7 +261,7 @@ export default function MapView({ rooms }: MapViewProps) {
       {/* Filter Panel - warm style to match site */}
       <div
         className="absolute top-4 left-4 z-10 max-w-sm rounded-2xl shadow-lg border border-[var(--warm-gray)]/15"
-        style={{ backgroundColor: 'var(--card-bg)', boxShadow: 'var(--shadow-card)' }}
+        style={{ backgroundColor: 'var(--cream)', boxShadow: 'var(--shadow-card)' }}
       >
         <div className="flex items-center justify-between border-b border-[var(--warm-gray)]/12 p-4">
           <h2 className="font-serif text-lg font-semibold text-[var(--foreground)]">
@@ -327,7 +327,7 @@ export default function MapView({ rooms }: MapViewProps) {
         <div
           className="absolute bottom-4 left-1/2 z-10 mx-4 w-full max-w-md -translate-x-1/2 rounded-2xl border shadow-lg"
           style={{
-            backgroundColor: 'var(--card-bg)',
+            backgroundColor: 'var(--cream)',
             borderColor: 'rgba(107,101,96,0.2)',
             boxShadow: 'var(--shadow-card)',
           }}
@@ -338,7 +338,7 @@ export default function MapView({ rooms }: MapViewProps) {
       <div
         className="absolute bottom-4 right-4 z-10 rounded-2xl border p-4 shadow-lg"
         style={{
-          backgroundColor: 'var(--card-bg)',
+          backgroundColor: 'var(--cream)',
           borderColor: 'rgba(107,101,96,0.15)',
           boxShadow: 'var(--shadow-card)',
         }}

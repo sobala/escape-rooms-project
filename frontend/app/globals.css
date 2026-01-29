@@ -1,14 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf8f5;
+  /* Page: warm + very light yellow, almost no gray */
+  --background: #F3EFE6;
   --foreground: #2d2a26;
   --hero-bg: #1e3a2e;
   --hero-bg-alt: #1e3a2e;
   --forest-deep: #2d5016;
-  --cream: #faf8f5;
+  /* Everything except page: whiter surfaces (header, footer, strips, cards, panels) */
+  --cream-white: #FAF9F6;
+  --cream-pills: #FAF9F6;
+  --cream: #FAF9F6;
   --cream-heading: #f5f1e8;
-  --warm-neutral: #f5f1e8;
+  --warm-neutral: #F3EFE6;
   --warm-taupe: #e8e3da;
   --warm-gray: #6b6560;
   --deep-olive: #3d4a2e;

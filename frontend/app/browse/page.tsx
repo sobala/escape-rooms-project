@@ -103,7 +103,7 @@ export default function BrowsePage() {
   const filteredRooms = filterRooms(rooms, difficultyFilter, themeFilter);
 
   return (
-    <div className="min-h-screen bg-[var(--cream)]">
+    <div className="min-h-screen bg-[var(--background)]">
       <SiteHeader />
 
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
@@ -158,7 +158,7 @@ export default function BrowsePage() {
         {/* Filters - warm panel */}
         <div
           className="mb-8 rounded-2xl border border-[var(--warm-gray)]/12 p-5 sm:p-6"
-          style={{ backgroundColor: 'var(--warm-taupe)', boxShadow: 'var(--shadow-soft)' }}
+          style={{ backgroundColor: 'var(--cream-white)', boxShadow: 'var(--shadow-soft)' }}
         >
           <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[var(--warm-gray)]">
             Filters
@@ -243,7 +243,7 @@ export default function BrowsePage() {
                 className={`animate-pulse overflow-hidden rounded-2xl border border-[var(--warm-gray)]/10 ${
                   viewMode === 'list' ? 'flex gap-4 p-4' : ''
                 }`}
-                style={{ backgroundColor: 'var(--card-bg)', boxShadow: 'var(--shadow-soft)' }}
+                style={{ backgroundColor: 'var(--cream)', boxShadow: 'var(--shadow-soft)' }}
               >
                 <div className={viewMode === 'tile' ? 'aspect-video bg-[var(--warm-gray)]/15' : 'h-24 w-24 shrink-0 rounded-xl bg-[var(--warm-gray)]/15 sm:h-32 sm:w-32'} />
                 <div className="flex-1 space-y-2 p-4">

@@ -69,42 +69,32 @@ export default function Home() {
   const displayRooms = filteredRooms.slice(0, 9);
 
   return (
-    <div className="min-h-screen bg-[var(--cream)]">
+    <div className="min-h-screen bg-[var(--background)]">
       <SiteHeader />
 
-      {/* Hero - warm forest green, blends with cream/earth vibe */}
+      {/* Hero - matches tile background with a hint of green */}
       <section
         className="relative flex min-h-[75vh] items-center justify-center overflow-hidden transition-opacity duration-700 ease-out"
         style={{
-          background: 'linear-gradient(160deg, #1e3a2e 0%, #2a4728 35%, #355a2a 65%, #1e3a2e 100%)',
+          background: 'linear-gradient(160deg, #f1efe6 0%, #f3efe6 40%, #f0eee5 70%, #f2f0e7 100%)',
         }}
       >
-        {/* Subtle organic texture overlay */}
+        {/* Subtle texture overlay */}
         <div
-          className="absolute inset-0 opacity-[0.06]"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          }}
-        />
-        {/* Warm atmospheric lighting - cream/gold, no blue */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse 85% 55% at 50% 15%, rgba(248,244,237,0.14) 0%, transparent 50%), radial-gradient(ellipse 60% 45% at 75% 85%, rgba(212,180,120,0.08) 0%, transparent 45%), linear-gradient(180deg, transparent 0%, rgba(30,58,46,0.35) 100%)',
           }}
         />
 
         <div className="relative max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h1
-            className="animate-hero-1 font-serif text-4xl font-medium tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl"
-            style={{ color: '#f5f1e8' }}
+            className="animate-hero-1 font-serif text-4xl font-medium tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl text-[var(--foreground)]"
           >
             Discover Your Next Adventure in London
           </h1>
           <p
-            className="animate-hero-2 mt-6 max-w-2xl mx-auto text-lg leading-relaxed sm:text-xl"
-            style={{ color: 'rgba(245,241,232,0.92)' }}
+            className="animate-hero-2 mt-6 max-w-2xl mx-auto text-lg leading-relaxed sm:text-xl text-[var(--warm-gray)]"
           >
             Connect through shared experiences. Find escape rooms that bring friends and families together—curated by difficulty and theme.
           </p>
@@ -114,15 +104,14 @@ export default function Home() {
               className="inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/50"
               style={{
                 backgroundColor: 'var(--gold)',
-                boxShadow: 'var(--glow-gold), 0 2px 8px rgba(0,0,0,0.1)',
+                boxShadow: 'var(--glow-gold), 0 2px 8px rgba(0,0,0,0.08)',
               }}
             >
               Explore Map
             </Link>
             <Link
               href="/browse"
-              className="inline-flex items-center justify-center rounded-full border-2 px-8 py-4 text-base font-semibold transition-all duration-300 hover:bg-[#f5f1e8]/10 focus:outline-none focus:ring-2 focus:ring-[#f5f1e8]/30"
-              style={{ borderColor: 'rgba(245,241,232,0.7)', color: '#f5f1e8' }}
+              className="inline-flex items-center justify-center rounded-full border-2 border-[var(--warm-gray)]/40 px-8 py-4 text-base font-semibold text-[var(--foreground)] transition-all duration-300 hover:bg-[var(--warm-gray)]/10 focus:outline-none focus:ring-2 focus:ring-[var(--warm-gray)]/20"
             >
               Browse Rooms
             </Link>
@@ -133,7 +122,7 @@ export default function Home() {
       {/* Filter pills - warm neutral bg, organic rounded, natural palette */}
       <section
         className="border-y border-[var(--warm-gray)]/12 transition-colors duration-300"
-        style={{ backgroundColor: 'var(--warm-taupe)' }}
+        style={{ backgroundColor: 'var(--cream-white)' }}
       >
         <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
@@ -204,7 +193,7 @@ export default function Home() {
                 key={i}
                 className="animate-pulse overflow-hidden rounded-2xl border border-[var(--warm-gray)]/10"
                 style={{
-                  backgroundColor: 'var(--card-bg)',
+                  backgroundColor: 'var(--cream)',
                   boxShadow: 'var(--shadow-soft)',
                 }}
               >
@@ -221,7 +210,7 @@ export default function Home() {
         ) : displayRooms.length === 0 ? (
           <div
             className="rounded-2xl border border-[var(--warm-gray)]/12 py-16 text-center"
-            style={{ backgroundColor: 'var(--card-bg)', boxShadow: 'var(--shadow-soft)' }}
+            style={{ backgroundColor: 'var(--cream)', boxShadow: 'var(--shadow-soft)' }}
           >
             <p className="text-[var(--warm-gray)]">No rooms match your filter.</p>
             <button
@@ -263,7 +252,7 @@ export default function Home() {
       {/* Footer CTA - warm slice */}
       <section
         className="border-t border-[var(--warm-gray)]/12"
-        style={{ backgroundColor: 'var(--warm-taupe)' }}
+        style={{ backgroundColor: 'var(--cream-white)' }}
       >
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="text-center">

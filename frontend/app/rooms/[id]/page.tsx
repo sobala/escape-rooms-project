@@ -35,7 +35,7 @@ export default function RoomDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--cream)]">
+      <div className="min-h-screen bg-[var(--background)]">
         <SiteHeader />
         <div className="flex min-h-[60vh] flex-col items-center justify-center">
           <div
@@ -50,7 +50,7 @@ export default function RoomDetailPage() {
 
   if (!roomId) {
     return (
-      <div className="min-h-screen bg-[var(--cream)]">
+      <div className="min-h-screen bg-[var(--background)]">
         <SiteHeader />
         <div className="mx-auto flex max-w-lg flex-col items-center justify-center px-4 py-16 text-center">
           <h1 className="font-serif text-3xl font-semibold tracking-tight text-[var(--foreground)]">
@@ -70,7 +70,7 @@ export default function RoomDetailPage() {
 
   if (error || (!loading && !room)) {
     return (
-      <div className="min-h-screen bg-[var(--cream)]">
+      <div className="min-h-screen bg-[var(--background)]">
         <SiteHeader />
         <div className="mx-auto max-w-lg px-4 py-16 text-center">
           <h1 className="font-serif text-3xl font-semibold tracking-tight text-[var(--foreground)]">
@@ -81,7 +81,7 @@ export default function RoomDetailPage() {
           </p>
           <div
             className="mt-6 rounded-2xl border border-[var(--warm-gray)]/15 p-4 text-left text-sm text-[var(--warm-gray)]"
-            style={{ backgroundColor: '#f5f1e8' }}
+            style={{ backgroundColor: 'var(--cream)' }}
           >
             <p><strong>API URL:</strong> {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}</p>
             <p><strong>Room ID:</strong> {roomId}</p>
@@ -125,7 +125,7 @@ export default function RoomDetailPage() {
   const difficultyText = room.difficulty === 4 || room.difficulty === 5 ? '#f5f1e8' : '#2d2a26';
 
   return (
-    <div className="min-h-screen bg-[var(--cream)]">
+    <div className="min-h-screen bg-[var(--background)]">
       <SiteHeader />
 
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
@@ -147,7 +147,7 @@ export default function RoomDetailPage() {
           {/* Hero */}
           <div
             className="p-8 text-white sm:p-10"
-            style={{ background: 'linear-gradient(135deg, #3F5F4A 0%, #1e3a2e 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #f1efe6 0%, #f3efe6 50%, #f0eee5 100%)' }}
           >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
@@ -196,7 +196,7 @@ export default function RoomDetailPage() {
                   {room.difficulty !== null && (
                     <div
                       className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
-                      style={{ backgroundColor: '#f5f1e8' }}
+                      style={{ backgroundColor: 'var(--cream)' }}
                     >
                       <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
                         Difficulty
@@ -215,7 +215,7 @@ export default function RoomDetailPage() {
                   {room.duration_minutes && (
                     <div
                       className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
-                      style={{ backgroundColor: '#f5f1e8' }}
+                      style={{ backgroundColor: 'var(--cream)' }}
                     >
                       <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
                         Duration
@@ -229,7 +229,7 @@ export default function RoomDetailPage() {
                   {(room.min_players || room.max_players) && (
                     <div
                       className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
-                      style={{ backgroundColor: '#f5f1e8' }}
+                      style={{ backgroundColor: 'var(--cream)' }}
                     >
                       <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
                         Group Size
@@ -243,7 +243,7 @@ export default function RoomDetailPage() {
                   {room.success_rate !== null && (
                     <div
                       className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
-                      style={{ backgroundColor: '#f5f1e8' }}
+                      style={{ backgroundColor: 'var(--cream)' }}
                     >
                       <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
                         Success Rate
@@ -264,7 +264,7 @@ export default function RoomDetailPage() {
                   </h2>
                   <div
                     className="mt-4 rounded-2xl border border-[var(--warm-gray)]/10 p-5 space-y-4"
-                    style={{ backgroundColor: '#f5f1e8' }}
+                    style={{ backgroundColor: 'var(--cream)' }}
                   >
                     <div>
                       <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
@@ -299,7 +299,7 @@ export default function RoomDetailPage() {
               {/* Booking Card */}
               <div
                 className="rounded-2xl border-2 border-[var(--accent)]/20 p-6"
-                style={{ backgroundColor: '#f5f1e8' }}
+                style={{ backgroundColor: 'var(--cream)' }}
               >
                 <div className="text-center">
                   {room.price !== null ? (
@@ -340,7 +340,7 @@ export default function RoomDetailPage() {
               {/* Quick Info */}
               <div
                 className="rounded-2xl border border-[var(--warm-gray)]/10 p-6"
-                style={{ backgroundColor: '#faf8f5', boxShadow: '0 4px 20px rgba(45,42,38,0.06)' }}
+                style={{ backgroundColor: 'var(--cream)', boxShadow: '0 4px 20px rgba(45,42,38,0.06)' }}
               >
                 <h3 className="font-serif text-lg font-semibold text-[var(--foreground)]">
                   Quick Info
