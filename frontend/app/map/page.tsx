@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import SiteHeader from '@/components/SiteHeader';
 import MapView from '@/components/MapView';
 
 interface Room {
@@ -22,39 +23,43 @@ export default function MapPage() {
 
   useEffect(() => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    
+
     fetch(`${API_URL}/api/rooms`)
-      .then(res => res.json())
-      .then(data => {
-        console.log('Loaded rooms from API:', data.rooms.length);
-        console.log('Room IDs:', data.rooms.map((r: Room) => r.id));
-        setRooms(data.rooms);
-        setLoading(false);
+      .then((res) => res.json())
+      .then((data) => {
+        setRooms(data.rooms ?? []);
       })
-      .catch(error => {
-        console.error('Error loading rooms:', error);
-        setLoading(false);
-      });
+      .catch(() => setRooms([]))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0f172a]">
-        <p className="text-xl text-gray-300">Loading map...</p>
+      <div className="flex min-h-screen flex-col bg-[var(--cream)]">
+        <SiteHeader />
+        <div className="flex flex-1 items-center justify-center">
+          <p className="font-serif text-xl text-[var(--warm-gray)]">Loading map...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <main className="h-screen flex flex-col bg-[#0f172a]">
-      <div className="p-4 bg-[#0f172a] border-b border-white/10">
-        <h1 className="text-2xl font-bold text-white">Escape Rooms Map</h1>
-        <p className="text-gray-400">
-          {rooms.length} rooms across London
+    <main className="flex min-h-screen flex-col bg-[var(--cream)]">
+      <SiteHeader />
+      <div
+        className="border-b border-[var(--warm-gray)]/12 px-4 py-4 sm:px-6 lg:px-8"
+        style={{ backgroundColor: 'var(--cream)' }}
+      >
+        <h1 className="font-serif text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+          Escape Rooms Map
+        </h1>
+        <p className="mt-1 text-[var(--warm-gray)]">
+          {rooms.length} room{rooms.length !== 1 ? 's' : ''} across London
         </p>
       </div>
-      
-      <div className="flex-1">
+
+      <div className="flex-1 min-h-0">
         <MapView rooms={rooms} />
       </div>
     </main>

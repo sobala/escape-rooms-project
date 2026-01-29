@@ -1,14 +1,22 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { useRoomById, formatPrice, formatDifficulty, formatPlayerRange } from '@/lib/api-client';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import SiteHeader from '@/components/SiteHeader';
+import { useRoomById, formatPlayerRange } from '@/lib/api-client';
+
+const DIFFICULTY_COLORS: Record<number, string> = {
+  1: '#84a98c',
+  2: '#84a98c',
+  3: '#d4a373',
+  4: '#c1666b',
+  5: '#6b4e71',
+};
 
 export default function RoomDetailPage() {
   const params = useParams();
-  const router = useRouter();
-  
-  // Parse room ID from URL
+
   let roomId: number | null = null;
   if (params?.id) {
     const parsed = parseInt(params.id as string, 10);
@@ -16,44 +24,25 @@ export default function RoomDetailPage() {
       roomId = parsed;
     }
   }
-  
-  const { room, loading, error } = useRoomById(roomId);
 
-  // Debug logging
-  useEffect(() => {
-    console.log('📄 Room Detail Page - Params:', params);
-    console.log('📄 Room Detail Page - Parsed Room ID:', roomId);
-    console.log('📄 Room Detail Page - Raw param ID:', params?.id);
-    if (roomId) {
-      console.log('✅ Valid room ID, will fetch:', roomId);
-    } else {
-      console.warn('⚠️ Invalid room ID from params:', params?.id);
-    }
-  }, [params, roomId]);
+  const { room, loading, error } = useRoomById(roomId);
 
   useEffect(() => {
     if (error) {
-      console.error('❌ Room fetch error:', error);
-      console.error('❌ Error details:', {
-        roomId,
-        apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
-        fullUrl: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/rooms/${roomId}`
-      });
+      console.error('Room fetch error:', error);
     }
   }, [error, roomId]);
 
-  useEffect(() => {
-    if (room) {
-      console.log('✅ Room loaded successfully:', room);
-    }
-  }, [room]);
-
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading room details...</p>
+      <div className="min-h-screen bg-[var(--cream)]">
+        <SiteHeader />
+        <div className="flex min-h-[60vh] flex-col items-center justify-center">
+          <div
+            className="h-12 w-12 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent"
+            style={{ borderTopColor: 'transparent' }}
+          />
+          <p className="mt-4 font-medium text-[var(--warm-gray)]">Loading room details...</p>
         </div>
       </div>
     );
@@ -61,16 +50,19 @@ export default function RoomDetailPage() {
 
   if (!roomId) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center max-w-md">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Invalid Room ID</h1>
-          <p className="text-gray-600 mb-6">The room ID in the URL is invalid.</p>
-          <button
-            onClick={() => router.push('/map')}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      <div className="min-h-screen bg-[var(--cream)]">
+        <SiteHeader />
+        <div className="mx-auto flex max-w-lg flex-col items-center justify-center px-4 py-16 text-center">
+          <h1 className="font-serif text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+            Invalid Room ID
+          </h1>
+          <p className="mt-4 text-[var(--warm-gray)]">The room ID in the URL is invalid.</p>
+          <Link
+            href="/map"
+            className="mt-8 rounded-full bg-[var(--accent)] px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"
           >
             Back to Map
-          </button>
+          </Link>
         </div>
       </div>
     );
@@ -78,118 +70,142 @@ export default function RoomDetailPage() {
 
   if (error || (!loading && !room)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center max-w-md">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Room Not Found</h1>
-          <p className="text-gray-600 mb-6">
+      <div className="min-h-screen bg-[var(--cream)]">
+        <SiteHeader />
+        <div className="mx-auto max-w-lg px-4 py-16 text-center">
+          <h1 className="font-serif text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+            Room Not Found
+          </h1>
+          <p className="mt-4 text-[var(--warm-gray)]">
             {error || `Room with ID ${roomId} does not exist.`}
           </p>
-          <div className="text-sm text-gray-500 mb-4 bg-gray-100 p-4 rounded">
+          <div
+            className="mt-6 rounded-2xl border border-[var(--warm-gray)]/15 p-4 text-left text-sm text-[var(--warm-gray)]"
+            style={{ backgroundColor: '#f5f1e8' }}
+          >
             <p><strong>API URL:</strong> {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}</p>
             <p><strong>Room ID:</strong> {roomId}</p>
-            <p><strong>Requested URL:</strong> {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/rooms/{roomId}</p>
-            <p className="mt-2 text-xs">
-              💡 Debug: <a 
-                href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/debug/room/${roomId}`} 
-                target="_blank" 
-                className="text-blue-600 underline"
-              >
-                Check room status
-              </a>
-            </p>
+            <a
+              href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/debug/room/${roomId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-block font-medium text-[var(--accent)] hover:underline"
+            >
+              Check room status
+            </a>
           </div>
-          <button
-            onClick={() => router.push('/map')}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          <Link
+            href="/map"
+            className="mt-8 inline-block rounded-full bg-[var(--accent)] px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"
           >
             Back to Map
-          </button>
+          </Link>
         </div>
       </div>
     );
   }
 
-  // Type guard: ensure room is not null before rendering
   if (!room) {
     return null;
   }
 
-  const getDifficultyColor = (difficulty: number | null) => {
-    if (!difficulty) return 'bg-gray-500';
-    if (difficulty <= 2) return 'bg-green-500';
-    if (difficulty === 3) return 'bg-yellow-500';
-    if (difficulty === 4) return 'bg-orange-500';
-    return 'bg-red-500';
-  };
-
   const getDifficultyLabel = (difficulty: number | null) => {
     if (!difficulty) return 'Unknown';
-    const labels = ['', 'Very Easy', 'Easy', 'Medium', 'Hard', 'Expert'];
+    const labels: Record<number, string> = {
+      1: 'Very Easy',
+      2: 'Easy',
+      3: 'Medium',
+      4: 'Hard',
+      5: 'Expert',
+    };
     return labels[difficulty] || `${difficulty}/5`;
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <button
-            onClick={() => router.push('/map')}
-            className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Map
-          </button>
-        </div>
-      </header>
+  const difficultyBg = room.difficulty ? DIFFICULTY_COLORS[room.difficulty] ?? '#84a98c' : '#84a98c';
+  const difficultyText = room.difficulty === 4 || room.difficulty === 5 ? '#f5f1e8' : '#2d2a26';
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Hero Section */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <h1 className="text-4xl font-bold mb-4">{room.name}</h1>
+  return (
+    <div className="min-h-screen bg-[var(--cream)]">
+      <SiteHeader />
+
+      <main className="mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+        {/* Back link */}
+        <Link
+          href="/map"
+          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
+        >
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Map
+        </Link>
+
+        <div
+          className="overflow-hidden rounded-2xl border border-[var(--warm-gray)]/10"
+          style={{ boxShadow: '0 8px 32px rgba(45,42,38,0.08)' }}
+        >
+          {/* Hero */}
+          <div
+            className="p-8 text-white sm:p-10"
+            style={{ background: 'linear-gradient(135deg, #2d6b5a 0%, #1e3a2e 100%)' }}
+          >
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <h1 className="font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
+                  {room.name}
+                </h1>
                 {room.theme && (
-                  <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                  <span
+                    className="mt-3 inline-block rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur-sm"
+                  >
                     {room.theme}
-                  </div>
+                  </span>
                 )}
                 {room.venue && (
-                  <p className="text-blue-100 text-lg">
-                    📍 {room.venue.name} • {room.venue.city}
+                  <p className="mt-4 text-[#e8e4dc]">
+                    {room.venue.name} · {room.venue.city}
                   </p>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Content Grid */}
-          <div className="grid md:grid-cols-3 gap-8 p-8">
-            {/* Main Content */}
-            <div className="md:col-span-2 space-y-6">
+          {/* Content */}
+          <div className="grid gap-8 p-6 md:grid-cols-3 md:p-8">
+            <div className="md:col-span-2 space-y-8">
               {/* Description */}
               <section>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">About This Room</h2>
+                <h2 className="font-serif text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                  About This Room
+                </h2>
                 {room.description ? (
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">{room.description}</p>
+                  <p className="mt-4 whitespace-pre-line leading-relaxed text-[var(--warm-gray)]">
+                    {room.description}
+                  </p>
                 ) : (
-                  <p className="text-gray-500 italic">No description available.</p>
+                  <p className="mt-4 italic text-[var(--warm-gray)]">No description available.</p>
                 )}
               </section>
 
-              {/* Details Grid */}
+              {/* Room Details */}
               <section>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Room Details</h2>
-                <div className="grid grid-cols-2 gap-4">
+                <h2 className="font-serif text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                  Room Details
+                </h2>
+                <div className="mt-4 grid grid-cols-2 gap-4">
                   {room.difficulty !== null && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="text-sm text-gray-600 mb-1">Difficulty</div>
-                      <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${getDifficultyColor(room.difficulty)}`}></div>
-                        <span className="font-semibold text-gray-900">
+                    <div
+                      className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
+                      style={{ backgroundColor: '#f5f1e8' }}
+                    >
+                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                        Difficulty
+                      </div>
+                      <div className="mt-1 flex items-center gap-2">
+                        <span
+                          className="inline-flex rounded-full px-2.5 py-0.5 text-sm font-medium"
+                          style={{ backgroundColor: difficultyBg, color: difficultyText }}
+                        >
                           {getDifficultyLabel(room.difficulty)} ({room.difficulty}/5)
                         </span>
                       </div>
@@ -197,25 +213,44 @@ export default function RoomDetailPage() {
                   )}
 
                   {room.duration_minutes && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="text-sm text-gray-600 mb-1">Duration</div>
-                      <div className="font-semibold text-gray-900">{room.duration_minutes} minutes</div>
+                    <div
+                      className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
+                      style={{ backgroundColor: '#f5f1e8' }}
+                    >
+                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                        Duration
+                      </div>
+                      <div className="mt-1 font-semibold text-[var(--foreground)]">
+                        {room.duration_minutes} minutes
+                      </div>
                     </div>
                   )}
 
                   {(room.min_players || room.max_players) && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="text-sm text-gray-600 mb-1">Group Size</div>
-                      <div className="font-semibold text-gray-900">
+                    <div
+                      className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
+                      style={{ backgroundColor: '#f5f1e8' }}
+                    >
+                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                        Group Size
+                      </div>
+                      <div className="mt-1 font-semibold text-[var(--foreground)]">
                         {formatPlayerRange(room.min_players, room.max_players, null)}
                       </div>
                     </div>
                   )}
 
                   {room.success_rate !== null && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="text-sm text-gray-600 mb-1">Success Rate</div>
-                      <div className="font-semibold text-gray-900">{room.success_rate.toFixed(1)}%</div>
+                    <div
+                      className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
+                      style={{ backgroundColor: '#f5f1e8' }}
+                    >
+                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                        Success Rate
+                      </div>
+                      <div className="mt-1 font-semibold text-[var(--foreground)]">
+                        {room.success_rate.toFixed(1)}%
+                      </div>
                     </div>
                   )}
                 </div>
@@ -224,19 +259,31 @@ export default function RoomDetailPage() {
               {/* Venue Information */}
               {room.venue && (
                 <section>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Venue Information</h2>
-                  <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                  <h2 className="font-serif text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                    Venue Information
+                  </h2>
+                  <div
+                    className="mt-4 rounded-2xl border border-[var(--warm-gray)]/10 p-5 space-y-4"
+                    style={{ backgroundColor: '#f5f1e8' }}
+                  >
                     <div>
-                      <div className="text-sm text-gray-600 mb-1">Address</div>
-                      <div className="font-medium text-gray-900">
+                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                        Address
+                      </div>
+                      <div className="mt-1 font-medium text-[var(--foreground)]">
                         {room.venue.address || 'Address not available'}
                       </div>
                     </div>
                     {room.venue.phone && (
                       <div>
-                        <div className="text-sm text-gray-600 mb-1">Phone</div>
-                        <div className="font-medium text-gray-900">
-                          <a href={`tel:${room.venue.phone}`} className="text-blue-600 hover:text-blue-700">
+                        <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                          Phone
+                        </div>
+                        <div className="mt-1 font-medium text-[var(--foreground)]">
+                          <a
+                            href={`tel:${room.venue.phone}`}
+                            className="text-[var(--accent)] hover:underline"
+                          >
                             {room.venue.phone}
                           </a>
                         </div>
@@ -250,17 +297,20 @@ export default function RoomDetailPage() {
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Booking Card */}
-              <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-lg border-2 border-blue-200">
-                <div className="text-center mb-6">
+              <div
+                className="rounded-2xl border-2 border-[var(--accent)]/20 p-6"
+                style={{ backgroundColor: '#f5f1e8' }}
+              >
+                <div className="text-center">
                   {room.price !== null ? (
-                    <div>
-                      <div className="text-4xl font-bold text-gray-900 mb-2">
+                    <>
+                      <div className="font-serif text-4xl font-semibold text-[var(--foreground)]">
                         {room.currency === 'GBP' ? '£' : '$'}{room.price.toFixed(2)}
                       </div>
-                      <div className="text-gray-600 text-sm">per person</div>
-                    </div>
+                      <div className="mt-1 text-sm text-[var(--warm-gray)]">per person</div>
+                    </>
                   ) : (
-                    <div className="text-gray-600">Price available on venue website</div>
+                    <div className="text-[var(--warm-gray)]">Price on venue website</div>
                   )}
                 </div>
 
@@ -269,64 +319,68 @@ export default function RoomDetailPage() {
                     href={room.venue.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full bg-blue-600 text-white text-center py-4 px-6 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors shadow-lg"
+                    className="mt-6 flex w-full items-center justify-center rounded-full bg-[var(--accent)] py-4 px-6 font-semibold text-white transition-opacity hover:opacity-90"
                   >
                     Book Now →
                   </a>
                 ) : (
                   <button
                     disabled
-                    className="block w-full bg-gray-400 text-white text-center py-4 px-6 rounded-lg font-semibold text-lg cursor-not-allowed"
+                    className="mt-6 w-full rounded-full bg-[var(--warm-gray)]/30 py-4 px-6 font-semibold text-[var(--warm-gray)] cursor-not-allowed"
                   >
                     Booking Unavailable
                   </button>
                 )}
 
-                <p className="text-xs text-gray-500 text-center mt-4">
-                  You'll be redirected to the venue's website to complete your booking.
+                <p className="mt-4 text-center text-xs text-[var(--warm-gray)]">
+                  You&apos;ll be redirected to the venue&apos;s website to complete your booking.
                 </p>
               </div>
 
               {/* Quick Info */}
-              <div className="bg-white border rounded-lg p-6 space-y-4">
-                <h3 className="font-bold text-gray-900">Quick Info</h3>
-                <div className="space-y-3 text-sm">
+              <div
+                className="rounded-2xl border border-[var(--warm-gray)]/10 p-6"
+                style={{ backgroundColor: '#faf8f5', boxShadow: '0 4px 20px rgba(45,42,38,0.06)' }}
+              >
+                <h3 className="font-serif text-lg font-semibold text-[var(--foreground)]">
+                  Quick Info
+                </h3>
+                <div className="mt-4 space-y-3 text-sm">
                   {room.theme && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Theme:</span>
-                      <span className="font-medium text-gray-900">{room.theme}</span>
+                    <div className="flex justify-between gap-2">
+                      <span className="text-[var(--warm-gray)]">Theme</span>
+                      <span className="font-medium text-[var(--foreground)]">{room.theme}</span>
                     </div>
                   )}
                   {room.difficulty !== null && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Difficulty:</span>
-                      <span className="font-medium text-gray-900">{room.difficulty}/5</span>
+                    <div className="flex justify-between gap-2">
+                      <span className="text-[var(--warm-gray)]">Difficulty</span>
+                      <span className="font-medium text-[var(--foreground)]">{room.difficulty}/5</span>
                     </div>
                   )}
                   {room.duration_minutes && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Duration:</span>
-                      <span className="font-medium text-gray-900">{room.duration_minutes} min</span>
+                    <div className="flex justify-between gap-2">
+                      <span className="text-[var(--warm-gray)]">Duration</span>
+                      <span className="font-medium text-[var(--foreground)]">{room.duration_minutes} min</span>
                     </div>
                   )}
                   {(room.min_players || room.max_players) && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Players:</span>
-                      <span className="font-medium text-gray-900">
-                        {room.min_players || '?'}-{room.max_players || '?'}
+                    <div className="flex justify-between gap-2">
+                      <span className="text-[var(--warm-gray)]">Players</span>
+                      <span className="font-medium text-[var(--foreground)]">
+                        {room.min_players ?? '?'}–{room.max_players ?? '?'}
                       </span>
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Map Link */}
-              <a
+              <Link
                 href="/map"
-                className="block w-full bg-gray-100 hover:bg-gray-200 text-gray-900 text-center py-3 px-6 rounded-lg font-medium transition-colors"
+                className="flex w-full items-center justify-center rounded-full border-2 border-[var(--warm-gray)]/20 bg-transparent py-3 px-6 font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--warm-gray)]/10"
               >
                 View on Map
-              </a>
+              </Link>
             </div>
           </div>
         </div>

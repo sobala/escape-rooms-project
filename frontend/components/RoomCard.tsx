@@ -14,11 +14,11 @@ export interface RoomCardData {
 }
 
 const DIFFICULTY_CONFIG = [
-  { level: 1, label: 'Easy', bg: '#10b981', dot: 'bg-[#10b981]' },
-  { level: 2, label: 'Easy', bg: '#10b981', dot: 'bg-[#10b981]' },
-  { level: 3, label: 'Medium', bg: '#f59e0b', dot: 'bg-[#f59e0b]' },
-  { level: 4, label: 'Hard', bg: '#ef4444', dot: 'bg-[#ef4444]' },
-  { level: 5, label: 'Expert', bg: '#7c3aed', dot: 'bg-[#7c3aed]' },
+  { level: 1, label: 'Easy', bg: '#84a98c', text: '#2d2a26' },
+  { level: 2, label: 'Easy', bg: '#84a98c', text: '#2d2a26' },
+  { level: 3, label: 'Medium', bg: '#d4a373', text: '#2d2a26' },
+  { level: 4, label: 'Hard', bg: '#c1666b', text: '#f5f1e8' },
+  { level: 5, label: 'Expert', bg: '#6b4e71', text: '#f5f1e8' },
 ];
 
 function getDifficultyStyle(difficulty: number | null) {
@@ -36,50 +36,66 @@ export default function RoomCard({ room }: { room: RoomCardData }) {
   const difficultyStyle = getDifficultyStyle(room.difficulty);
 
   return (
-    <article className="group bg-[#374151] rounded-xl overflow-hidden shadow-xl shadow-black/20 border border-gray-600/50 hover:shadow-2xl hover:border-gray-500/60 transition-all duration-300 hover:scale-[1.02]">
-      <Link href={`/rooms/${room.id}`} className="block">
-        {/* 16:9 Image - moody lighting placeholder */}
-        <div className="relative aspect-video overflow-hidden">
+    <article
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--warm-gray)]/10 transition-all duration-300 hover:border-[var(--warm-gray)]/20"
+      style={{
+        backgroundColor: '#faf8f5',
+        boxShadow: '0 4px 20px rgba(45,42,38,0.06)',
+      }}
+    >
+      <Link href={`/rooms/${room.id}`} className="flex min-h-0 flex-1 flex-col">
+        {/* 16:9 image area - warm, inviting placeholder */}
+        <div className="relative aspect-video shrink-0 overflow-hidden">
           <div
-            className="absolute inset-0 bg-gradient-to-t from-black/80 via-gray-900/40 to-gray-800/60"
+            className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
             style={{
-              backgroundImage: `linear-gradient(135deg, rgba(15,23,42,0.9) 0%, rgba(30,41,59,0.6) 50%, rgba(51,65,85,0.4) 100%), url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%234f46e5' fill-opacity='0.08'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40z'/%3E%3C/g%3E%3C/svg%3E")`,
+              backgroundImage: `linear-gradient(135deg, rgba(212,163,115,0.22) 0%, rgba(132,169,140,0.18) 50%, rgba(107,78,113,0.12) 100%), linear-gradient(180deg, rgba(250,248,245,0.15) 0%, rgba(45,42,38,0.25) 100%), url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2384a98c' fill-opacity='0.08'%3E%3Cpath d='M0 0h30v30H0V0zm30 30h30v30H30V30z'/%3E%3C/g%3E%3C/svg%3E")`,
             }}
           />
-          {/* Subtle vignette */}
-          <div className="absolute inset-0 ring-inset ring-1 ring-white/5" />
-          {/* Difficulty badge - top left */}
+          <div className="absolute inset-0 ring-1 ring-inset ring-black/5" />
+          {/* Minimal difficulty badge */}
           <div className="absolute top-3 left-3">
             <span
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold text-white shadow-lg"
-              style={{ backgroundColor: difficultyStyle.bg }}
+              className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
+              style={{
+                backgroundColor: difficultyStyle.bg,
+                color: difficultyStyle.text,
+                boxShadow: '0 1px 6px rgba(0,0,0,0.08)',
+              }}
             >
-              <span className={`w-1.5 h-1.5 rounded-full ${difficultyStyle.dot}`} />
               {difficultyStyle.label}
             </span>
           </div>
         </div>
 
-        <div className="p-5">
-          <h3 className="text-lg font-bold text-white group-hover:text-[#3b82f6] transition-colors line-clamp-2">
+        <div className="flex min-h-0 flex-1 flex-col p-6">
+          {/* Room title: 1–2 lines */}
+          <h3 className="font-serif text-xl font-semibold leading-tight text-[var(--foreground)] transition-colors group-hover:text-[var(--accent)] line-clamp-2">
             {room.name}
           </h3>
-          {room.venue_name && (
-            <p className="mt-1 text-sm text-gray-400">{room.venue_name}</p>
-          )}
+          {/* Venue: fixed 2 lines of space; short names leave second line empty */}
+          <p className="mt-1.5 min-h-[2.5rem] line-clamp-2 text-sm leading-tight text-[var(--warm-gray)]">
+            {room.venue_name || '\u00A0'}
+          </p>
           {room.theme && (
-            <span className="inline-block mt-2 px-2.5 py-1 rounded-md bg-gray-600/50 text-gray-300 text-xs font-medium border border-gray-500/30">
+            <span className="mt-3 self-start inline-block rounded-full border border-[var(--warm-gray)]/20 px-3 py-1 text-xs font-medium text-[var(--warm-gray)]">
               {room.theme}
             </span>
           )}
-          <div className="mt-4 flex items-center justify-between gap-3">
-            <span className="text-lg font-bold text-white">
+          <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-5">
+            <span className="text-base font-semibold text-[var(--foreground)]">
               {formatPrice(room.price, room.currency)}
-              <span className="text-gray-400 font-normal text-sm"> / person</span>
+              <span className="ml-1 font-normal text-[var(--warm-gray)] text-sm">/ person</span>
             </span>
-            <span className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-[#3b82f6] text-white text-sm font-semibold shadow-lg shadow-blue-500/25 group-hover:bg-blue-500 transition-colors">
-              View Details
-              <svg className="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span
+              className="inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 group-hover:shadow-md"
+              style={{
+                backgroundColor: 'var(--accent)',
+                boxShadow: '0 2px 10px rgba(45,107,90,0.25)',
+              }}
+            >
+              Discover
+              <svg className="ml-1.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </span>
