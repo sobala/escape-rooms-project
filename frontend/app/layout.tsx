@@ -28,6 +28,7 @@ export default function RootLayout({
     <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="antialiased font-sans">
         {children}
+        <Analytics />
       </body>
     </html>
   );
