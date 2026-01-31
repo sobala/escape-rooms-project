@@ -1,10 +1,13 @@
+from datetime import datetime, timedelta
 from typing import Optional
+
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from database import get_db
-from models import Room, Venue
+from models import Room, RoomView, Venue
 
 # Import the map API router
 from api.map_api import router as map_router
@@ -122,6 +125,7 @@ def get_rooms(
     city: Optional[str] = None,
     theme: Optional[str] = None,
     difficulty: Optional[int] = None,
+    sort: Optional[str] = None,
     db: Session = Depends(get_db),
 ):
     query = (
@@ -136,6 +140,18 @@ def get_rooms(
         query = query.filter(Room.theme.ilike(f"%{theme}%"))
     if difficulty:
         query = query.filter(Room.difficulty == difficulty)
+
+    if sort == "trending":
+        thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+        recent_views = (
+            db.query(RoomView.room_id, func.count(RoomView.id).label("recent_views"))
+            .filter(RoomView.viewed_at >= thirty_days_ago)
+            .group_by(RoomView.room_id)
+            .subquery()
+        )
+        query = query.outerjoin(recent_views, Room.id == recent_views.c.room_id).order_by(
+            recent_views.c.recent_views.desc().nullslast(), Room.id
+        )
 
     rooms = query.all()
 

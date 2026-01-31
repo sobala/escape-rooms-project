@@ -39,7 +39,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/rooms`)
+    fetch(`${API_URL}/api/rooms?sort=trending`)
       .then((res) => res.json())
       .then((data) => {
         const list = data.rooms ?? [];
@@ -102,17 +102,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured rooms grid - cream cards, generous spacing */}
+      {/* Trending rooms – ranked by page views in the past 30 days */}
       <section
-        id="featured-rooms"
+        id="trending-rooms"
         className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-18 lg:px-8 lg:py-20"
       >
         <div className="mb-12">
           <h2 className="font-serif text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
-            Featured rooms
+            Trending rooms
           </h2>
           <p className="mt-2 text-[var(--warm-gray)]">
-            Popular escape rooms in London
+            Most visited in the past 30 days
           </p>
         </div>
 
