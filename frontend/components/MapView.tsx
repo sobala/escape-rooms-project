@@ -197,9 +197,6 @@ export default function MapView({ rooms }: MapViewProps) {
             <p style="margin: 4px 0; font-size: 13px;">
             <strong>Price:</strong> £${room.price || 'N/A'}
             </p>
-            <p style="margin: 4px 0; font-size: 11px; color: #999;">
-            Room ID: ${roomId}
-            </p>
             <button 
             id="room-detail-btn-${roomId}"
             onclick="console.log('🔘 Clicking View Details for room ID:', ${roomId}); window.location.href='/rooms/${roomId}'"
