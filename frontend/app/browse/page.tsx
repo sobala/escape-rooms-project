@@ -321,7 +321,7 @@ export default function BrowsePage() {
                 <p className="mt-2 text-sm text-[var(--warm-gray)]/80">API: {API_URL}/api/rooms</p>
                 <button
                   onClick={loadRooms}
-                  className="mt-4 rounded-full bg-[var(--gold)] px-5 py-2.5 font-semibold text-white shadow-sm hover:opacity-90"
+                  className="mt-4 rounded-full bg-[var(--accent)] px-5 py-2.5 font-semibold text-white shadow-sm hover:opacity-90"
                 >
                   Retry
                 </button>
@@ -345,7 +345,7 @@ export default function BrowsePage() {
                 <p className="mt-2 text-sm text-[var(--warm-gray)]/80">Make sure the backend is running at {API_URL}</p>
                 <button
                   onClick={loadRooms}
-                  className="mt-4 rounded-full bg-[var(--gold)] px-5 py-2.5 font-semibold text-white shadow-sm hover:opacity-90"
+                  className="mt-4 rounded-full bg-[var(--accent)] px-5 py-2.5 font-semibold text-white shadow-sm hover:opacity-90"
                 >
                   Retry
                 </button>

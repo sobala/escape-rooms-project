@@ -109,10 +109,10 @@ export default function Home() {
           <div className="animate-hero-3 mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/map"
-              className="inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/50"
+              className="inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
               style={{
-                backgroundColor: 'var(--gold)',
-                boxShadow: 'var(--glow-gold), 0 2px 8px rgba(0,0,0,0.08)',
+                backgroundColor: 'var(--accent)',
+                boxShadow: '0 4px 20px rgba(63,95,74,0.3), 0 2px 8px rgba(0,0,0,0.08)',
               }}
             >
               Explore Map

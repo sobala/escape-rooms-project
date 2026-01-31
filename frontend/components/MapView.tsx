@@ -207,7 +207,7 @@ export default function MapView({ rooms }: MapViewProps) {
                 width: 100%;
                 margin-top: 12px;
                 padding: 8px 16px;
-                background: #c9a66b;
+                background: #3F5F4A;
                 color: white;
                 border: none;
                 border-radius: 8px;
@@ -215,8 +215,8 @@ export default function MapView({ rooms }: MapViewProps) {
                 font-weight: 600;
                 cursor: pointer;
             "
-            onmouseover="this.style.background='#b8945a'"
-            onmouseout="this.style.background='#c9a66b'"
+            onmouseover="this.style.background='#354f42'"
+            onmouseout="this.style.background='#3F5F4A'"
             >
             View Details
             </button>
