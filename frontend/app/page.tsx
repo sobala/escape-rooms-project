@@ -98,7 +98,7 @@ export default function Home() {
           <p
             className="animate-hero-2 mt-6 max-w-2xl mx-auto text-lg leading-relaxed sm:text-xl text-[var(--warm-gray)]"
           >
-            Connect through shared experiences. Find escape rooms that bring friends and families together—curated by difficulty and theme.
+            Connect through shared experiences. Find escape rooms that bring friends and families together.
           </p>
           <div className="animate-hero-3 mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
