@@ -55,12 +55,9 @@ export default function Home() {
     <div className="min-h-screen bg-[var(--background)]">
       <SiteHeader />
 
-      {/* Hero - matches tile background with a hint of green */}
+      {/* Hero – same background as trending rooms / page */}
       <section
-        className="relative flex min-h-[75vh] items-center justify-center overflow-hidden transition-opacity duration-700 ease-out"
-        style={{
-          background: 'linear-gradient(160deg, #f1efe6 0%, #f3efe6 40%, #f0eee5 70%, #f2f0e7 100%)',
-        }}
+        className="relative flex min-h-[75vh] items-center justify-center overflow-hidden transition-opacity duration-700 ease-out bg-[var(--background)]"
       >
         {/* Subtle texture overlay */}
         <div
