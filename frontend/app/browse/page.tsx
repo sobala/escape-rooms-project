@@ -208,18 +208,31 @@ export default function BrowsePage() {
 
             <div>
               <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">Theme</label>
-              <select
-                value={themeFilter}
-                onChange={(e) => setThemeFilter(e.target.value)}
-                className="max-w-xs rounded-full border border-[var(--warm-gray)]/25 bg-[var(--cream)] px-4 py-2.5 text-sm text-[var(--foreground)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/30"
-              >
-                <option value="">All themes</option>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setThemeFilter('')}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    !themeFilter
+                      ? 'bg-[rgba(45,42,38,0.12)] text-[var(--foreground)] shadow-sm'
+                      : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
+                  }`}
+                >
+                  All themes
+                </button>
                 {themes.sort().map((theme) => (
-                  <option key={theme} value={theme}>
+                  <button
+                    key={theme}
+                    onClick={() => setThemeFilter(theme)}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                      themeFilter === theme
+                        ? 'bg-[rgba(45,42,38,0.12)] text-[var(--foreground)] shadow-sm'
+                        : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
+                    }`}
+                  >
                     {theme}
-                  </option>
+                  </button>
                 ))}
-              </select>
+              </div>
             </div>
 
             {(difficultyFilter > 0 || themeFilter) && (

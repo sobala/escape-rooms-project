@@ -44,6 +44,7 @@ export default function Home() {
   const [rooms, setRooms] = useState<RoomCardData[]>([]);
   const [loading, setLoading] = useState(true);
   const [difficultyFilter, setDifficultyFilter] = useState<number>(0);
+  const [themeFilter, setThemeFilter] = useState<string>('');
 
   useEffect(() => {
     fetch(`${API_URL}/api/rooms`)
@@ -56,17 +57,20 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, []);
 
-  const filteredRooms =
-    difficultyFilter === 0
-      ? rooms
-      : rooms.filter((r) => {
-          if (!r.difficulty) return false;
-          if (difficultyFilter === 1) return r.difficulty <= 2;
-          if (difficultyFilter === 2) return r.difficulty === 3;
-          if (difficultyFilter === 3) return r.difficulty === 4;
-          if (difficultyFilter === 4) return r.difficulty === 5;
-          return true;
-        });
+  const themes = [...new Set(rooms.map((r) => r.theme).filter(Boolean))].sort() as string[];
+
+  const filteredRooms = rooms
+    .filter((r) => {
+      if (difficultyFilter !== 0) {
+        if (!r.difficulty) return false;
+        if (difficultyFilter === 1) return r.difficulty <= 2;
+        if (difficultyFilter === 2) return r.difficulty === 3;
+        if (difficultyFilter === 3) return r.difficulty === 4;
+        if (difficultyFilter === 4) return r.difficulty === 5;
+      }
+      return true;
+    })
+    .filter((r) => !themeFilter || r.theme === themeFilter);
 
   const displayRooms = filteredRooms.slice(0, 9);
 
@@ -121,53 +125,92 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Filter pills - warm neutral bg, organic rounded, natural palette */}
+      {/* Filter pills + theme - warm neutral bg, organic rounded, natural palette */}
       <section
         className="border-y border-[var(--warm-gray)]/12 transition-colors duration-300"
         style={{ backgroundColor: 'var(--cream-white)' }}
       >
         <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            {DIFFICULTY_PILLS.map((pill) => (
-              <button
-                key={pill.value}
-                onClick={() => setDifficultyFilter(pill.value)}
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+              {DIFFICULTY_PILLS.map((pill) => (
+                <button
+                  key={pill.value}
+                  onClick={() => setDifficultyFilter(pill.value)}
+                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300"
+                  style={
+                    difficultyFilter === pill.value
+                      ? pill.color
+                        ? {
+                            backgroundColor: pill.color,
+                            color: pill.value === 4 ? '#f5f1e8' : '#2d2a26',
+                            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                          }
+                        : {
+                            backgroundColor: 'rgba(45,42,38,0.12)',
+                            color: 'var(--foreground)',
+                            boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+                          }
+                      : {
+                          backgroundColor: 'transparent',
+                          color: 'var(--warm-gray)',
+                        }
+                  }
+                >
+                  {pill.color && (
+                    <span
+                      className="h-2 w-2 shrink-0 rounded-full"
+                      style={{
+                        backgroundColor:
+                          difficultyFilter === pill.value
+                            ? pill.value === 4
+                              ? 'rgba(245,241,232,0.9)'
+                              : 'rgba(45,42,38,0.6)'
+                            : pill.color,
+                      }}
+                    />
+                  )}
+                  {pill.label}
+                </button>
+              ))}
+            </div>
+            <div className="border-t border-[var(--warm-gray)]/15 pt-6">
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+                <button
+                  onClick={() => setThemeFilter('')}
                 className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300"
                 style={
-                  difficultyFilter === pill.value
-                    ? pill.color
-                      ? {
-                          backgroundColor: pill.color,
-                          color: pill.value === 4 ? '#f5f1e8' : '#2d2a26',
-                          boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-                        }
-                      : {
-                          backgroundColor: 'rgba(45,42,38,0.12)',
-                          color: 'var(--foreground)',
-                          boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-                        }
-                    : {
-                        backgroundColor: 'transparent',
-                        color: 'var(--warm-gray)',
+                  !themeFilter
+                    ? {
+                        backgroundColor: 'rgba(45,42,38,0.12)',
+                        color: 'var(--foreground)',
+                        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
                       }
+                    : { backgroundColor: 'transparent', color: 'var(--warm-gray)' }
                 }
               >
-                {pill.color && (
-                  <span
-                    className="h-2 w-2 shrink-0 rounded-full"
-                    style={{
-                      backgroundColor:
-                        difficultyFilter === pill.value
-                          ? pill.value === 4
-                            ? 'rgba(245,241,232,0.9)'
-                            : 'rgba(45,42,38,0.6)'
-                          : pill.color,
-                    }}
-                  />
-                )}
-                {pill.label}
+                All themes
               </button>
-            ))}
+              {themes.map((theme) => (
+                <button
+                  key={theme}
+                  onClick={() => setThemeFilter(theme)}
+                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300"
+                  style={
+                    themeFilter === theme
+                      ? {
+                          backgroundColor: 'rgba(45,42,38,0.12)',
+                          color: 'var(--foreground)',
+                          boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                        }
+                      : { backgroundColor: 'transparent', color: 'var(--warm-gray)' }
+                  }
+                >
+                  {theme}
+                </button>
+              ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -182,9 +225,9 @@ export default function Home() {
             Featured rooms
           </h2>
           <p className="mt-2 text-[var(--warm-gray)]">
-            {difficultyFilter === 0
+            {difficultyFilter === 0 && !themeFilter
               ? 'Popular escape rooms in London'
-              : `${displayRooms.length} room${displayRooms.length !== 1 ? 's' : ''} matching your filter`}
+              : `${filteredRooms.length} room${filteredRooms.length !== 1 ? 's' : ''} matching your filter`}
           </p>
         </div>
 
@@ -216,10 +259,13 @@ export default function Home() {
           >
             <p className="text-[var(--warm-gray)]">No rooms match your filter.</p>
             <button
-              onClick={() => setDifficultyFilter(0)}
+              onClick={() => {
+                setDifficultyFilter(0);
+                setThemeFilter('');
+              }}
               className="mt-4 font-semibold text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
             >
-              Clear filter
+              Clear filters
             </button>
           </div>
         ) : (
