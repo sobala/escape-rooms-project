@@ -165,6 +165,7 @@ def get_rooms(
                 "venue_name": room.venue.name if room.venue else None,
                 "primary_image_url": room.primary_image_url,
                 "image_urls": room.image_urls or [],
+                "duration_minutes": room.duration_minutes,
             }
         )
 

@@ -26,6 +26,7 @@ function mapApiRoomToCard(room: {
   venue_name?: string | null;
   city?: string | null;
   primary_image_url?: string | null;
+  duration_minutes?: number | null;
 }): RoomCardData {
   return {
     id: room.id,
@@ -37,6 +38,7 @@ function mapApiRoomToCard(room: {
     venue_name: room.venue_name ?? null,
     city: room.city ?? null,
     primary_image_url: room.primary_image_url ?? null,
+    duration_minutes: room.duration_minutes ?? null,
   };
 }
 

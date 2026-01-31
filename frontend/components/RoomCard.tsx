@@ -12,6 +12,7 @@ export interface RoomCardData {
   venue_name: string | null;
   city: string | null;
   primary_image_url?: string | null;
+  duration_minutes?: number | null;
 }
 
 const DIFFICULTY_CONFIG = [

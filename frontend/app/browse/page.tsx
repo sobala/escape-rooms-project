@@ -17,6 +17,13 @@ const DIFFICULTY_OPTIONS = [
   { value: 4, label: 'Expert', color: '#6b4e71' },
 ] as const;
 
+const DURATION_OPTIONS = [
+  { value: '', label: 'All' },
+  { value: 'under60', label: 'Under 60 min' },
+  { value: '60-90', label: '60–90 min' },
+  { value: '90plus', label: '90+ min' },
+] as const;
+
 function mapApiRoomToCard(room: {
   id: number;
   name: string;
@@ -27,6 +34,7 @@ function mapApiRoomToCard(room: {
   venue_name?: string | null;
   city?: string | null;
   primary_image_url?: string | null;
+  duration_minutes?: number | null;
 }): RoomCardData {
   return {
     id: room.id,
@@ -38,6 +46,7 @@ function mapApiRoomToCard(room: {
     venue_name: room.venue_name ?? null,
     city: room.city ?? null,
     primary_image_url: room.primary_image_url ?? null,
+    duration_minutes: room.duration_minutes ?? null,
   };
 }
 
@@ -46,7 +55,8 @@ type ViewMode = 'tile' | 'list';
 function filterRooms(
   rooms: RoomCardData[],
   difficultyFilter: number,
-  themeFilter: string
+  themeFilter: string,
+  durationFilter: string
 ): RoomCardData[] {
   let filtered = rooms;
 
@@ -67,6 +77,16 @@ function filterRooms(
     );
   }
 
+  if (durationFilter && durationFilter !== '') {
+    filtered = filtered.filter((r) => {
+      const d = r.duration_minutes ?? 0;
+      if (durationFilter === 'under60') return d > 0 && d < 60;
+      if (durationFilter === '60-90') return d >= 60 && d <= 90;
+      if (durationFilter === '90plus') return d > 90;
+      return true;
+    });
+  }
+
   return filtered;
 }
 
@@ -77,6 +97,7 @@ export default function BrowsePage() {
   const [viewMode, setViewMode] = useState<ViewMode>('tile');
   const [difficultyFilter, setDifficultyFilter] = useState(0);
   const [themeFilter, setThemeFilter] = useState('');
+  const [durationFilter, setDurationFilter] = useState('');
 
   const loadRooms = () => {
     setLoading(true);
@@ -102,7 +123,7 @@ export default function BrowsePage() {
   }, []);
 
   const themes = Array.from(new Set(rooms.map((r) => r.theme).filter(Boolean))) as string[];
-  const filteredRooms = filterRooms(rooms, difficultyFilter, themeFilter);
+  const filteredRooms = filterRooms(rooms, difficultyFilter, themeFilter, durationFilter);
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -235,11 +256,31 @@ export default function BrowsePage() {
               </div>
             </div>
 
-            {(difficultyFilter > 0 || themeFilter) && (
+            <div>
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">Duration</label>
+              <div className="flex flex-wrap gap-2">
+                {DURATION_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value || 'all'}
+                    onClick={() => setDurationFilter(opt.value)}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                      durationFilter === opt.value
+                        ? 'bg-[rgba(45,42,38,0.12)] text-[var(--foreground)] shadow-sm'
+                        : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {(difficultyFilter > 0 || themeFilter || durationFilter) && (
               <button
                 onClick={() => {
                   setDifficultyFilter(0);
                   setThemeFilter('');
+                  setDurationFilter('');
                 }}
                 className="text-sm font-medium text-[var(--accent)] hover:underline"
               >
