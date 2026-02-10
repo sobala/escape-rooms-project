@@ -7,6 +7,9 @@ export interface RoomCardData {
   name: string;
   theme: string | null;
   difficulty: number | null;
+  // Pricing – min/max per person plus a fallback "from" price
+  price_min: number | null;
+  price_max: number | null;
   price: number | null;
   currency: string | null;
   venue_name: string | null;
@@ -28,10 +31,35 @@ function getDifficultyStyle(difficulty: number | null) {
   return DIFFICULTY_CONFIG[Math.min(Math.max(difficulty - 1, 0), 4)];
 }
 
-function formatPrice(price: number | null, currency: string | null): string {
-  if (price == null) return 'Price on request';
-  if (currency === 'GBP') return `£${price.toFixed(0)}`;
-  return `£${price.toFixed(0)}`;
+function formatPriceRange(
+  priceMin: number | null,
+  priceMax: number | null,
+  fallbackPrice: number | null,
+  currency: string | null
+): string {
+  const symbol = currency === 'GBP' || !currency ? '£' : '£';
+  const fmt = (value: number) => value.toFixed(0);
+
+  if (priceMin != null && priceMax != null) {
+    if (priceMin === priceMax) {
+      return `${symbol}${fmt(priceMin)}`;
+    }
+    return `${symbol}${fmt(priceMin)}–${symbol}${fmt(priceMax)}`;
+  }
+
+  if (priceMin != null) {
+    return `From ${symbol}${fmt(priceMin)}`;
+  }
+
+  if (priceMax != null) {
+    return `Up to ${symbol}${fmt(priceMax)}`;
+  }
+
+  if (fallbackPrice != null) {
+    return `${symbol}${fmt(fallbackPrice)}`;
+  }
+
+  return 'Price on request';
 }
 
 export default function RoomCard({ room }: { room: RoomCardData }) {
@@ -135,7 +163,7 @@ export default function RoomCard({ room }: { room: RoomCardData }) {
           )}
           <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-5">
             <span className="text-base font-semibold text-[var(--foreground)]">
-              {formatPrice(room.price, room.currency)}
+              {formatPriceRange(room.price_min, room.price_max, room.price, room.currency)}
               <span className="ml-1 font-normal text-[var(--warm-gray)] text-sm">/ person</span>
             </span>
             <span

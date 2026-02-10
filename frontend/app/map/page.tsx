@@ -9,7 +9,10 @@ interface Room {
   name: string;
   theme: string;
   difficulty: number;
-  price: number;
+  // Pricing from /api/rooms: min/max plus a convenient "from" price
+  price_min?: number | null;
+  price_max?: number | null;
+  price?: number | null;
   currency: string;
   latitude: number;
   longitude: number;

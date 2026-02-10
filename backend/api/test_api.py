@@ -45,7 +45,10 @@ def test_map_basic():
             print(f"  Distance: {room['distance_km']} km")
             print(f"  Theme: {room['theme']}")
             print(f"  Difficulty: {room['difficulty']}/5")
-            print(f"  Price: ${room['base_price']}\n")
+            print(
+                f"  Price: £{room.get('min_price_per_person')} "
+                f"(min), £{room.get('max_price_per_person')} (max)\n"
+            )
     else:
         print(f"Error: {response.text}\n")
 
@@ -78,7 +81,9 @@ def test_map_filters():
             print(f"{i}. {room['name']}")
             print(f"   {room['venue']['name']} - {room['distance_km']} km")
             print(
-                f"   {room['theme']} | Difficulty: {room['difficulty']}/5 | ${room['base_price']}"
+                f"   {room['theme']} | Difficulty: {room['difficulty']}/5 | "
+                f"£{room.get('min_price_per_person')}–"
+                f"£{room.get('max_price_per_person')} per person"
             )
     else:
         print(f"Error: {response.text}\n")

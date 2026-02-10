@@ -167,13 +167,29 @@ def get_rooms(
 
     rooms_list = []
     for room in rooms:
+        # Prefer explicit min/max per-person prices when available.
+        min_price = (
+            float(room.min_price_per_person)
+            if getattr(room, "min_price_per_person", None) is not None
+            else None
+        )
+        max_price = (
+            float(room.max_price_per_person)
+            if getattr(room, "max_price_per_person", None) is not None
+            else None
+        )
+
         rooms_list.append(
             {
                 "id": room.id,
                 "name": room.name,
                 "theme": room.theme,
                 "difficulty": room.difficulty,
-                "price": float(room.base_price) if room.base_price else None,
+                # Expose min/max as separate fields and keep a single `price`
+                # field for existing clients (using the min when available).
+                "price_min": min_price,
+                "price_max": max_price,
+                "price": min_price,
                 "currency": room.currency,
                 "latitude": float(room.latitude) if room.latitude else None,
                 "longitude": float(room.longitude) if room.longitude else None,
@@ -247,7 +263,16 @@ def get_room(room_id: int, db: Session = Depends(get_db)):
         "min_players": room.min_players,
         "max_players": room.max_players,
         "duration_minutes": room.duration_minutes,
-        "price": float(room.base_price) if room.base_price else None,
+        # Expose explicit min/max, and keep `price` for existing clients.
+        "price_min": float(room.min_price_per_person)
+        if getattr(room, "min_price_per_person", None) is not None
+        else None,
+        "price_max": float(room.max_price_per_person)
+        if getattr(room, "max_price_per_person", None) is not None
+        else None,
+        "price": float(room.min_price_per_person)
+        if getattr(room, "min_price_per_person", None) is not None
+        else None,
         "currency": room.currency,
         "success_rate": float(room.success_rate) if room.success_rate else None,
         "primary_image_url": room.primary_image_url,

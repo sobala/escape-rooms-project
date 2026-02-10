@@ -9,7 +9,10 @@ interface Room {
   name: string;
   theme: string;
   difficulty: number;
-  price: number;
+  // Pricing from /api/rooms: min/max plus a convenient "from" price
+  price_min?: number | null;
+  price_max?: number | null;
+  price?: number | null;
   currency: string;
   venue_name: string;
   city: string;
@@ -127,6 +130,24 @@ export default function MapView({ rooms }: MapViewProps) {
 
     const offsetRooms = offsetPins(filteredRooms);
 
+    const formatPrice = (room: Room): string => {
+      const symbol = room.currency === 'GBP' || !room.currency ? '£' : '£';
+      const fmt0 = (value: number) => value.toFixed(0);
+
+      const min = room.price_min ?? null;
+      const max = room.price_max ?? null;
+      const fallback = room.price ?? null;
+
+      if (min != null && max != null) {
+        if (min === max) return `${symbol}${fmt0(min)}`;
+        return `${symbol}${fmt0(min)}–${symbol}${fmt0(max)}`;
+      }
+      if (min != null) return `From ${symbol}${fmt0(min)}`;
+      if (max != null) return `Up to ${symbol}${fmt0(max)}`;
+      if (fallback != null) return `${symbol}${fmt0(fallback)}`;
+      return 'Price on request';
+    };
+
     offsetRooms.forEach((room) => {
       if (!room.latitude || !room.longitude) return;
 
@@ -195,7 +216,7 @@ export default function MapView({ rooms }: MapViewProps) {
             <strong>Difficulty:</strong> ${room.difficulty || '?'}/5
             </p>
             <p style="margin: 4px 0; font-size: 13px;">
-            <strong>Price:</strong> £${room.price || 'N/A'}
+            <strong>Price:</strong> ${formatPrice(room)}
             </p>
             <button 
             id="room-detail-btn-${roomId}"

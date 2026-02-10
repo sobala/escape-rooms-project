@@ -54,7 +54,9 @@ class RoomResponse(BaseModel):
     max_players: Optional[int]
     optimal_players: Optional[int]
     duration_minutes: Optional[int]
-    base_price: Optional[float]
+    # Pricing
+    min_price_per_person: Optional[float]
+    max_price_per_person: Optional[float]
     price_per_person: Optional[bool]
     success_rate: Optional[float]
     primary_image_url: Optional[str]
@@ -194,7 +196,11 @@ async def get_rooms_map(
                 query = query.filter(Room.min_players <= max_players)
 
         if max_price:
-            query = query.filter(Room.base_price <= max_price)
+            # Filter by the minimum per-person price when available.
+            query = query.filter(
+                Room.min_price_per_person.isnot(None),
+                Room.min_price_per_person <= max_price,
+            )
 
         if min_rating:
             query = query.filter(Venue.google_rating >= min_rating)
@@ -208,7 +214,8 @@ async def get_rooms_map(
         elif sort_by == "rating":
             query = query.order_by(Venue.google_rating.desc().nullslast())
         elif sort_by == "price":
-            query = query.order_by(Room.base_price.asc().nullslast())
+            # Sort by minimum per-person price when available.
+            query = query.order_by(Room.min_price_per_person.asc().nullslast())
         elif sort_by == "difficulty":
             query = query.order_by(Room.difficulty.desc())
         elif sort_by == "popularity":
@@ -250,7 +257,12 @@ async def get_rooms_map(
                 "max_players": room.max_players,
                 "optimal_players": room.optimal_players,
                 "duration_minutes": room.duration_minutes,
-                "base_price": float(room.base_price) if room.base_price else None,
+                "min_price_per_person": float(room.min_price_per_person)
+                if room.min_price_per_person is not None
+                else None,
+                "max_price_per_person": float(room.max_price_per_person)
+                if room.max_price_per_person is not None
+                else None,
                 "price_per_person": room.price_per_person,
                 "success_rate": float(room.success_rate) if room.success_rate else None,
                 "primary_image_url": room.primary_image_url,
@@ -358,7 +370,12 @@ async def get_room_by_slug(
             "max_players": room.max_players,
             "optimal_players": room.optimal_players,
             "duration_minutes": room.duration_minutes,
-            "base_price": float(room.base_price) if room.base_price else None,
+            "min_price_per_person": float(room.min_price_per_person)
+            if room.min_price_per_person is not None
+            else None,
+            "max_price_per_person": float(room.max_price_per_person)
+            if room.max_price_per_person is not None
+            else None,
             "price_per_person": room.price_per_person,
             "success_rate": float(room.success_rate) if room.success_rate else None,
             "primary_image_url": room.primary_image_url,

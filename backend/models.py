@@ -92,7 +92,9 @@ class Room(Base):
     duration_minutes = Column(Integer)
 
     # Pricing (Multi-Currency)
-    base_price = Column(DECIMAL(10, 2), nullable=False)
+    # Store explicit min/max price per person as scraped from sources.
+    min_price_per_person = Column(DECIMAL(10, 2))
+    max_price_per_person = Column(DECIMAL(10, 2))
     currency = Column(String(3), nullable=False)
     price_per_person = Column(Boolean, default=True)
     price_usd = Column(DECIMAL(10, 2))

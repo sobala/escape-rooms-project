@@ -16,9 +16,35 @@ function getDifficultyStyle(difficulty: number | null) {
   return DIFFICULTY_CONFIG[Math.min(Math.max(difficulty - 1, 0), 4)];
 }
 
-function formatPrice(price: number | null, currency: string | null): string {
-  if (price == null) return 'Price on request';
-  return currency === 'GBP' ? `£${price.toFixed(0)}` : `£${price.toFixed(0)}`;
+function formatPriceRange(
+  priceMin: number | null,
+  priceMax: number | null,
+  fallbackPrice: number | null,
+  currency: string | null
+): string {
+  const symbol = currency === 'GBP' || !currency ? '£' : '£';
+  const fmt = (value: number) => value.toFixed(0);
+
+  if (priceMin != null && priceMax != null) {
+    if (priceMin === priceMax) {
+      return `${symbol}${fmt(priceMin)}`;
+    }
+    return `${symbol}${fmt(priceMin)}–${symbol}${fmt(priceMax)}`;
+  }
+
+  if (priceMin != null) {
+    return `From ${symbol}${fmt(priceMin)}`;
+  }
+
+  if (priceMax != null) {
+    return `Up to ${symbol}${fmt(priceMax)}`;
+  }
+
+  if (fallbackPrice != null) {
+    return `${symbol}${fmt(fallbackPrice)}`;
+  }
+
+  return 'Price on request';
 }
 
 export default function RoomListItem({ room }: { room: RoomCardData }) {
@@ -84,7 +110,7 @@ export default function RoomListItem({ room }: { room: RoomCardData }) {
 
       <div className="shrink-0 text-right">
         <div className="font-semibold text-[var(--foreground)]">
-          {formatPrice(room.price, room.currency)}
+          {formatPriceRange(room.price_min, room.price_max, room.price, room.currency)}
         </div>
         <div className="text-xs text-[var(--warm-gray)]">/ person</div>
         <span

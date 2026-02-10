@@ -121,6 +121,46 @@ export default function RoomDetailPage() {
     return labels[difficulty] || `${difficulty}/5`;
   };
 
+  const formatPriceRange = (
+    priceMin: number | null,
+    priceMax: number | null,
+    fallbackPrice: number | null,
+    currency: string | null
+  ): { main: string | null; subtitle: string | null } => {
+    const symbol = currency === 'GBP' || !currency ? '£' : '£';
+    const fmt = (value: number) => value.toFixed(2);
+
+    if (priceMin != null && priceMax != null) {
+      if (priceMin === priceMax) {
+        return { main: `${symbol}${fmt(priceMin)}`, subtitle: 'per person' };
+      }
+      return {
+        main: `${symbol}${fmt(priceMin)}–${symbol}${fmt(priceMax)}`,
+        subtitle: 'per person',
+      };
+    }
+
+    if (priceMin != null) {
+      return {
+        main: `${symbol}${fmt(priceMin)}`,
+        subtitle: 'per person (from)',
+      };
+    }
+
+    if (priceMax != null) {
+      return {
+        main: `${symbol}${fmt(priceMax)}`,
+        subtitle: 'per person (up to)',
+      };
+    }
+
+    if (fallbackPrice != null) {
+      return { main: `${symbol}${fmt(fallbackPrice)}`, subtitle: 'per person' };
+    }
+
+    return { main: null, subtitle: null };
+  };
+
   const difficultyBg = room.difficulty ? DIFFICULTY_COLORS[room.difficulty] ?? '#84a98c' : '#84a98c';
   const difficultyText = room.difficulty === 4 || room.difficulty === 5 ? '#f5f1e8' : '#2d2a26';
 
@@ -329,16 +369,27 @@ export default function RoomDetailPage() {
                 style={{ backgroundColor: 'var(--cream)' }}
               >
                 <div className="text-center">
-                  {room.price !== null ? (
-                    <>
-                      <div className="font-serif text-4xl font-semibold text-[var(--foreground)]">
-                        {room.currency === 'GBP' ? '£' : '$'}{room.price.toFixed(2)}
-                      </div>
-                      <div className="mt-1 text-sm text-[var(--warm-gray)]">per person</div>
-                    </>
-                  ) : (
-                    <div className="text-[var(--warm-gray)]">Price on venue website</div>
-                  )}
+                  {(() => {
+                    const { main, subtitle } = formatPriceRange(
+                      (room as any).price_min ?? null,
+                      (room as any).price_max ?? null,
+                      room.price,
+                      room.currency
+                    );
+                    if (!main) {
+                      return <div className="text-[var(--warm-gray)]">Price on venue website</div>;
+                  }
+                    return (
+                      <>
+                        <div className="font-serif text-4xl font-semibold text-[var(--foreground)]">
+                          {main}
+                        </div>
+                        {subtitle && (
+                          <div className="mt-1 text-sm text-[var(--warm-gray)]">{subtitle}</div>
+                        )}
+                      </>
+                    );
+                  })()}
                 </div>
 
                 {room.venue?.website ? (

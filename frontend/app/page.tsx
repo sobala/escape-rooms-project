@@ -13,6 +13,8 @@ function mapApiRoomToCard(room: {
   name: string;
   theme?: string | null;
   difficulty?: number | null;
+  price_min?: number | null;
+  price_max?: number | null;
   price?: number | null;
   currency?: string | null;
   venue_name?: string | null;
@@ -25,6 +27,8 @@ function mapApiRoomToCard(room: {
     name: room.name,
     theme: room.theme ?? null,
     difficulty: room.difficulty ?? null,
+    price_min: room.price_min ?? null,
+    price_max: room.price_max ?? null,
     price: room.price ?? null,
     currency: room.currency ?? null,
     venue_name: room.venue_name ?? null,

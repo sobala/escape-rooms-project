@@ -29,7 +29,9 @@ export interface Room {
   max_players: number | null;
   optimal_players: number | null;
   duration_minutes: number | null;
-  base_price: number | null;
+  // Pricing
+  min_price_per_person: number | null;
+  max_price_per_person: number | null;
   price_per_person: boolean | null;
   success_rate: number | null;
   primary_image_url: string | null;
@@ -82,6 +84,9 @@ export interface RoomDetail {
   min_players: number | null;
   max_players: number | null;
   duration_minutes: number | null;
+  // Pricing for detail view – min/max plus a convenient "from" price
+  price_min: number | null;
+  price_max: number | null;
   price: number | null;
   currency: string | null;
   success_rate: number | null;
