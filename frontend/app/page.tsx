@@ -41,6 +41,7 @@ function mapApiRoomToCard(room: {
 export default function Home() {
   const [rooms, setRooms] = useState<RoomCardData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showMiniNav, setShowMiniNav] = useState(false);
 
   useEffect(() => {
     fetch(`${API_URL}/api/rooms?sort=trending`)
@@ -53,111 +54,141 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    const el = document.getElementById('trending-rooms');
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowMiniNav(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const displayRooms = rooms.slice(0, 9);
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <SiteHeader />
-
-      {/* Hero – same background as trending rooms / page */}
-      <section
-        className="relative flex min-h-[75vh] items-center justify-center overflow-hidden transition-opacity duration-700 ease-out bg-[var(--background)]"
-      >
-        {/* Subtle texture overlay */}
+      {/* Hero + header wrapper – hero extends behind header */}
+      <div className="relative">
+        <div className="fixed top-0 left-0 right-0 z-30">
+          <SiteHeader />
+        </div>
+        {/* Hero – stairwell background, dark to match content */}
+        <section
+          className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[var(--background)] pt-14"
+        >
+        {/* Background image – lifted to de-emphasize LOBBY at bottom */}
         <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          }}
+          className="absolute inset-0 z-0 bg-cover bg-no-repeat brightness-95 saturate-90"
+          style={{ backgroundImage: 'url(/images/hero-stairwell.png)', backgroundPosition: 'center 20%' }}
+          aria-hidden
         />
-
-        <div className="relative max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+        {/* Overlay – grey + green, heavier at top/bottom, lighter in middle */}
+        <div
+          className="absolute inset-0 z-[1]"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.8) 100%)',
+          }}
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 z-[1]"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(29, 46, 30, 0.45) 0%, rgba(29, 46, 30, 0.22) 40%, rgba(29, 46, 30, 0.22) 60%, rgba(29, 46, 30, 0.38) 100%)',
+          }}
+          aria-hidden
+        />
+        {/* Bottom gradient – smooth transition into content */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-[20%] min-h-[120px] z-[2] pointer-events-none"
+          style={{
+            background: 'linear-gradient(to top, #1C1E1A 0%, rgba(28, 30, 26, 0.7) 35%, rgba(28, 30, 26, 0.3) 65%, transparent 100%)',
+          }}
+          aria-hidden
+        />
+        {/* Film grain overlay – very subtle */}
+        <div
+          className="absolute inset-0 z-[3] opacity-[0.11] pointer-events-none grain-overlay"
+          aria-hidden
+        />
+        <div className="relative z-10 max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <h1
-            className="animate-hero-1 font-serif text-4xl font-medium tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl text-[var(--foreground)]"
+            className="animate-hero-1 text-4xl font-semibold tracking-tight text-[#E2E4DE] sm:text-5xl lg:text-6xl"
           >
             Discover Your Next Adventure in London
           </h1>
           <p
-            className="animate-hero-2 mt-6 max-w-2xl mx-auto text-lg leading-relaxed sm:text-xl text-[var(--warm-gray)]"
+            className="animate-hero-2 mt-6 max-w-xl mx-auto text-base leading-relaxed text-[#8A8C86] sm:text-lg"
           >
             Connect through shared experiences. Find escape rooms that bring friends and families together.
           </p>
-          <div className="animate-hero-3 mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="animate-hero-3 mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/map"
-              className="inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
-              style={{
-                backgroundColor: 'var(--accent)',
-                boxShadow: '0 4px 20px rgba(63,95,74,0.3), 0 2px 8px rgba(0,0,0,0.08)',
-              }}
+              className="inline-flex items-center justify-center rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-medium text-[var(--accent-foreground)] shadow-[var(--shadow-accent)] transition-all hover:bg-[var(--accent-hover)] hover:shadow-lg min-w-[11.5rem]"
             >
               Explore Map
             </Link>
             <Link
               href="/browse"
-              className="inline-flex items-center justify-center rounded-full border-2 border-[var(--warm-gray)]/40 px-8 py-4 text-base font-semibold text-[var(--foreground)] transition-all duration-300 hover:bg-[var(--warm-gray)]/10 focus:outline-none focus:ring-2 focus:ring-[var(--warm-gray)]/20"
+              className="inline-flex items-center justify-center rounded-full border-[1.5px] border-white/20 px-6 py-3 text-sm font-medium text-[#C8CAC4] transition-all hover:border-white/30 hover:bg-white/5 min-w-[11.5rem]"
             >
               Browse Rooms
             </Link>
           </div>
         </div>
-      </section>
 
-      {/* Trending rooms – ranked by page views in the past 30 days */}
+      </section>
+      </div>
+
+      {/* Trending rooms */}
       <section
         id="trending-rooms"
-        className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-18 lg:px-8 lg:py-20"
+        className="mx-auto max-w-6xl px-4 pt-8 pb-16 sm:px-6 sm:pt-10 lg:px-8"
       >
-        <div className="mb-12">
-          <h2 className="font-serif text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
+        <div className="mb-10">
+          <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)] sm:text-3xl">
             Trending rooms
           </h2>
-          <p className="mt-2 text-[var(--warm-gray)]">
+          <p className="mt-1.5 text-base text-[var(--foreground-muted)]">
             Most visited in the past 30 days
           </p>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[...Array(6)].map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse overflow-hidden rounded-2xl border border-[var(--warm-gray)]/10"
-                style={{
-                  backgroundColor: 'var(--cream)',
-                  boxShadow: 'var(--shadow-soft)',
-                }}
+                className="animate-pulse overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]"
               >
-                <div className="aspect-video bg-[var(--warm-gray)]/15" />
-                <div className="space-y-3 p-6">
-                  <div className="h-5 w-3/4 rounded bg-[var(--warm-gray)]/20" />
-                  <div className="h-4 w-1/2 rounded bg-[var(--warm-gray)]/15" />
-                  <div className="h-4 w-1/4 rounded bg-[var(--warm-gray)]/15" />
-                  <div className="mt-4 h-10 w-1/3 rounded-lg bg-[var(--warm-gray)]/15" />
+                <div className="aspect-video bg-[var(--border-subtle)]" />
+                <div className="space-y-3 p-5">
+                  <div className="h-4 w-3/4 rounded bg-[var(--border-subtle)]" />
+                  <div className="h-3 w-1/2 rounded bg-[var(--border-subtle)]" />
+                  <div className="mt-4 h-9 w-1/3 rounded-lg bg-[var(--border-subtle)]" />
                 </div>
               </div>
             ))}
           </div>
         ) : displayRooms.length === 0 ? (
-          <div
-            className="rounded-2xl border border-[var(--warm-gray)]/12 py-16 text-center"
-            style={{ backgroundColor: 'var(--cream)', boxShadow: 'var(--shadow-soft)' }}
-          >
-            <p className="text-[var(--warm-gray)]">No rooms found.</p>
+          <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] py-16 text-center">
+            <p className="text-[var(--foreground-muted)]">No rooms found.</p>
             <Link
               href="/browse"
-              className="mt-4 inline-block font-semibold text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
+              className="mt-4 inline-block text-sm font-medium text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
             >
               Browse rooms
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {displayRooms.map((room, i) => (
               <div
                 key={room.id}
                 className="animate-card-in h-full"
-                style={{ animationDelay: `${Math.min(i * 80, 400)}ms` }}
+                style={{ animationDelay: `${Math.min(i * 60, 300)}ms` }}
               >
                 <RoomCard room={room} />
               </div>
@@ -166,13 +197,13 @@ export default function Home() {
         )}
 
         {!loading && rooms.length > 9 && (
-          <div className="mt-14 text-center">
+          <div className="mt-12 text-center">
             <Link
               href="/map"
-              className="inline-flex items-center font-semibold text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
+              className="inline-flex items-center text-sm font-medium text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
             >
               View all on map
-              <svg className="ml-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="ml-1.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
@@ -180,26 +211,19 @@ export default function Home() {
         )}
       </section>
 
-      {/* Footer CTA - warm slice */}
-      <section
-        className="border-t border-[var(--warm-gray)]/12"
-        style={{ backgroundColor: 'var(--cream-white)' }}
-      >
+      {/* Footer CTA */}
+      <section className="border-t border-[var(--border)] bg-[var(--background-alt)]">
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="font-serif text-2xl font-semibold tracking-tight text-[var(--foreground)] sm:text-3xl">
+            <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)] sm:text-2xl">
               Ready to play?
             </h2>
-            <p className="mx-auto mt-2 max-w-md text-[var(--warm-gray)]">
+            <p className="mx-auto mt-2 max-w-md text-base text-[var(--foreground-muted)]">
               Explore all rooms on the map and find one near you.
             </p>
             <Link
               href="/map"
-              className="mt-8 inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:opacity-90"
-              style={{
-                backgroundColor: 'var(--accent)',
-                boxShadow: '0 4px 20px rgba(63,95,74,0.3)',
-              }}
+              className="mt-6 inline-flex items-center justify-center rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-medium text-[var(--accent-foreground)] shadow-[var(--shadow-accent)] transition-all hover:bg-[var(--accent-hover)]"
             >
               Open map
             </Link>
@@ -207,6 +231,35 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Sticky mini-nav – appears when trending section enters viewport */}
+      <nav
+        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)]/95 px-4 py-2.5 text-sm font-medium shadow-[var(--shadow-md)] backdrop-blur-sm transition-opacity duration-300 ${
+          showMiniNav ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        aria-label="Section navigation"
+      >
+        <button
+          type="button"
+          onClick={() => document.getElementById('trending-rooms')?.scrollIntoView({ behavior: 'smooth' })}
+          className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
+        >
+          Trending
+        </button>
+        <span className="text-[var(--border)]" aria-hidden>·</span>
+        <Link
+          href="/map"
+          className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
+        >
+          Near You
+        </Link>
+        <span className="text-[var(--border)]" aria-hidden>·</span>
+        <Link
+          href="/browse"
+          className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
+        >
+          Top Rated
+        </Link>
+      </nav>
     </div>
   );
 }

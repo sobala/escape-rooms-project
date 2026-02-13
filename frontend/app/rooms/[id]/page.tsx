@@ -7,11 +7,11 @@ import SiteHeader from '@/components/SiteHeader';
 import { useRoomById, formatPlayerRange } from '@/lib/api-client';
 
 const DIFFICULTY_COLORS: Record<number, string> = {
-  1: '#84a98c',
-  2: '#84a98c',
-  3: '#d4a373',
-  4: '#c1666b',
-  5: '#6b4e71',
+  1: 'rgba(107,127,103,0.15)',
+  2: 'rgba(107,127,103,0.15)',
+  3: 'rgba(184,155,98,0.12)',
+  4: 'rgba(168,96,90,0.12)',
+  5: 'rgba(92,40,36,0.2)',
 };
 
 export default function RoomDetailPage() {
@@ -38,11 +38,8 @@ export default function RoomDetailPage() {
       <div className="min-h-screen bg-[var(--background)]">
         <SiteHeader />
         <div className="flex min-h-[60vh] flex-col items-center justify-center">
-          <div
-            className="h-12 w-12 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent"
-            style={{ borderTopColor: 'transparent' }}
-          />
-          <p className="mt-4 font-medium text-[var(--warm-gray)]">Loading room details...</p>
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent" />
+        <p className="mt-4 text-sm text-[var(--foreground-muted)]">Loading room details...</p>
         </div>
       </div>
     );
@@ -53,13 +50,13 @@ export default function RoomDetailPage() {
       <div className="min-h-screen bg-[var(--background)]">
         <SiteHeader />
         <div className="mx-auto flex max-w-lg flex-col items-center justify-center px-4 py-16 text-center">
-          <h1 className="font-serif text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
             Invalid Room ID
           </h1>
-          <p className="mt-4 text-[var(--warm-gray)]">The room ID in the URL is invalid.</p>
+          <p className="mt-4 text-sm text-[var(--foreground-muted)]">The room ID in the URL is invalid.</p>
           <Link
             href="/map"
-            className="mt-8 rounded-full bg-[var(--accent)] px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"
+            className="mt-8 rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-medium text-[var(--accent-foreground)] hover:bg-[var(--accent-hover)]"
           >
             Back to Map
           </Link>
@@ -73,16 +70,13 @@ export default function RoomDetailPage() {
       <div className="min-h-screen bg-[var(--background)]">
         <SiteHeader />
         <div className="mx-auto max-w-lg px-4 py-16 text-center">
-          <h1 className="font-serif text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
             Room Not Found
           </h1>
-          <p className="mt-4 text-[var(--warm-gray)]">
+          <p className="mt-4 text-sm text-[var(--foreground-muted)]">
             {error || `Room with ID ${roomId} does not exist.`}
           </p>
-          <div
-            className="mt-6 rounded-2xl border border-[var(--warm-gray)]/15 p-4 text-left text-sm text-[var(--warm-gray)]"
-            style={{ backgroundColor: 'var(--cream)' }}
-          >
+          <div className="mt-6 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 text-left text-sm text-[var(--foreground-muted)]">
             <p><strong>API URL:</strong> {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}</p>
             <p><strong>Room ID:</strong> {roomId}</p>
             <a
@@ -96,7 +90,7 @@ export default function RoomDetailPage() {
           </div>
           <Link
             href="/map"
-            className="mt-8 inline-block rounded-full bg-[var(--accent)] px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"
+            className="mt-8 inline-block rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-medium text-[var(--accent-foreground)] hover:bg-[var(--accent-hover)]"
           >
             Back to Map
           </Link>
@@ -161,8 +155,8 @@ export default function RoomDetailPage() {
     return { main: null, subtitle: null };
   };
 
-  const difficultyBg = room.difficulty ? DIFFICULTY_COLORS[room.difficulty] ?? '#84a98c' : '#84a98c';
-  const difficultyText = room.difficulty === 4 || room.difficulty === 5 ? '#f5f1e8' : '#2d2a26';
+  const difficultyBg = room.difficulty ? DIFFICULTY_COLORS[room.difficulty] ?? 'rgba(107,127,103,0.15)' : 'rgba(107,127,103,0.15)';
+  const difficultyText = room.difficulty === 1 || room.difficulty === 2 ? '#9BAA97' : room.difficulty === 3 ? '#D4C4A0' : '#D4A09A';
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -180,10 +174,7 @@ export default function RoomDetailPage() {
           Back to Map
         </Link>
 
-        <div
-          className="overflow-hidden rounded-2xl border border-[var(--warm-gray)]/10"
-          style={{ boxShadow: '0 8px 32px rgba(45,42,38,0.08)' }}
-        >
+        <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]">
           {/* Hero - image or gradient */}
           <div className="relative min-h-[12rem] sm:min-h-[14rem]">
             {room.primary_image_url ? (
@@ -203,32 +194,32 @@ export default function RoomDetailPage() {
             ) : (
               <div
                 className="absolute inset-0"
-                style={{ background: 'linear-gradient(135deg, #f1efe6 0%, #f3efe6 50%, #f0eee5 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #2C2E28 0%, #343632 50%, #242620 100%)' }}
               />
             )}
             <div className="relative p-8 sm:p-10">
               <h1
-                className={`font-serif text-3xl font-semibold tracking-tight sm:text-4xl ${
+                className={`text-2xl font-semibold tracking-tight sm:text-3xl ${
                   room.primary_image_url ? 'text-white drop-shadow-md' : 'text-[var(--foreground)]'
                 }`}
               >
                 {room.name}
               </h1>
               {room.theme && (
-                <span
-                  className={`mt-3 inline-block rounded-full px-4 py-1.5 text-sm font-medium backdrop-blur-sm ${
-                    room.primary_image_url
-                      ? 'border border-white/40 bg-white/20 text-white'
-                      : 'border border-[var(--warm-gray)]/30 bg-white/80 text-[var(--foreground)]'
-                  }`}
-                >
+              <span
+                className={`mt-3 inline-block rounded-full px-4 py-1.5 text-sm font-medium ${
+                  room.primary_image_url
+                    ? 'border border-white/40 bg-white/20 text-white backdrop-blur-sm'
+                    : 'border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)]'
+                }`}
+              >
                   {room.theme}
                 </span>
               )}
               {room.venue && (
                 <p
                   className={`mt-4 ${
-                    room.primary_image_url ? 'text-white/95' : 'text-[var(--warm-gray)]'
+                    room.primary_image_url ? 'text-white/95' : 'text-[var(--foreground-muted)]'
                   }`}
                 >
                   {room.venue.name} · {room.venue.city}
@@ -242,30 +233,27 @@ export default function RoomDetailPage() {
             <div className="md:col-span-2 space-y-8">
               {/* Description */}
               <section>
-                <h2 className="font-serif text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
                   About This Room
                 </h2>
                 {room.description ? (
-                  <p className="mt-4 whitespace-pre-line leading-relaxed text-[var(--warm-gray)]">
+                  <p className="mt-4 whitespace-pre-line leading-relaxed text-[var(--foreground-muted)]">
                     {room.description}
                   </p>
                 ) : (
-                  <p className="mt-4 italic text-[var(--warm-gray)]">No description available.</p>
+                  <p className="mt-4 italic text-[var(--foreground-muted)]">No description available.</p>
                 )}
               </section>
 
               {/* Room Details */}
               <section>
-                <h2 className="font-serif text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
                   Room Details
                 </h2>
                 <div className="mt-4 grid grid-cols-2 gap-4">
                   {room.difficulty !== null && (
-                    <div
-                      className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
-                      style={{ backgroundColor: 'var(--cream)' }}
-                    >
-                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                    <div className="rounded-[var(--radius)] border border-[var(--border)] bg-[var(--background-alt)] p-4">
+                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
                         Difficulty
                       </div>
                       <div className="mt-1 flex items-center gap-2">
@@ -280,11 +268,8 @@ export default function RoomDetailPage() {
                   )}
 
                   {room.duration_minutes && (
-                    <div
-                      className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
-                      style={{ backgroundColor: 'var(--cream)' }}
-                    >
-                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                    <div className="rounded-[var(--radius)] border border-[var(--border)] bg-[var(--background-alt)] p-4">
+                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
                         Duration
                       </div>
                       <div className="mt-1 font-semibold text-[var(--foreground)]">
@@ -294,11 +279,8 @@ export default function RoomDetailPage() {
                   )}
 
                   {(room.min_players || room.max_players) && (
-                    <div
-                      className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
-                      style={{ backgroundColor: 'var(--cream)' }}
-                    >
-                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                    <div className="rounded-[var(--radius)] border border-[var(--border)] bg-[var(--background-alt)] p-4">
+                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
                         Group Size
                       </div>
                       <div className="mt-1 font-semibold text-[var(--foreground)]">
@@ -308,11 +290,8 @@ export default function RoomDetailPage() {
                   )}
 
                   {room.success_rate !== null && (
-                    <div
-                      className="rounded-2xl border border-[var(--warm-gray)]/10 p-4"
-                      style={{ backgroundColor: 'var(--cream)' }}
-                    >
-                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                    <div className="rounded-[var(--radius)] border border-[var(--border)] bg-[var(--background-alt)] p-4">
+                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
                         Success Rate
                       </div>
                       <div className="mt-1 font-semibold text-[var(--foreground)]">
@@ -326,15 +305,12 @@ export default function RoomDetailPage() {
               {/* Venue Information */}
               {room.venue && (
                 <section>
-                  <h2 className="font-serif text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                  <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
                     Venue Information
                   </h2>
-                  <div
-                    className="mt-4 rounded-2xl border border-[var(--warm-gray)]/10 p-5 space-y-4"
-                    style={{ backgroundColor: 'var(--cream)' }}
-                  >
+                  <div className="mt-4 rounded-[var(--radius)] border border-[var(--border)] bg-[var(--background-alt)] p-5 space-y-4">
                     <div>
-                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                      <div className="text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
                         Address
                       </div>
                       <div className="mt-1 font-medium text-[var(--foreground)]">
@@ -343,7 +319,7 @@ export default function RoomDetailPage() {
                     </div>
                     {room.venue.phone && (
                       <div>
-                        <div className="text-xs font-medium uppercase tracking-wider text-[var(--warm-gray)]">
+                        <div className="text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
                           Phone
                         </div>
                         <div className="mt-1 font-medium text-[var(--foreground)]">
@@ -364,10 +340,7 @@ export default function RoomDetailPage() {
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Booking Card */}
-              <div
-                className="rounded-2xl border-2 border-[var(--accent)]/20 p-6"
-                style={{ backgroundColor: 'var(--cream)' }}
-              >
+              <div className="rounded-[var(--radius-lg)] border-2 border-[var(--border)] bg-[var(--surface)] p-6">
                 <div className="text-center">
                   {(() => {
                     const { main, subtitle } = formatPriceRange(
@@ -377,15 +350,15 @@ export default function RoomDetailPage() {
                       room.currency
                     );
                     if (!main) {
-                      return <div className="text-[var(--warm-gray)]">Price on venue website</div>;
+                      return <div className="text-[var(--foreground-muted)]">Price on venue website</div>;
                   }
                     return (
                       <>
-                        <div className="font-serif text-4xl font-semibold text-[var(--foreground)]">
+                        <div className="text-3xl font-semibold text-[var(--foreground)]">
                           {main}
                         </div>
                         {subtitle && (
-                          <div className="mt-1 text-sm text-[var(--warm-gray)]">{subtitle}</div>
+                          <div className="mt-1 text-sm text-[var(--foreground-muted)]">{subtitle}</div>
                         )}
                       </>
                     );
@@ -397,54 +370,51 @@ export default function RoomDetailPage() {
                     href={room.venue.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-6 flex w-full items-center justify-center rounded-full bg-[var(--accent)] py-4 px-6 font-semibold text-white transition-opacity hover:opacity-90"
+                    className="mt-6 flex w-full items-center justify-center rounded-full bg-[var(--accent)] py-4 px-6 text-sm font-medium text-[var(--accent-foreground)] shadow-[var(--shadow-accent)] transition-all hover:bg-[var(--accent-hover)]"
                   >
                     Book Now →
                   </a>
                 ) : (
                   <button
                     disabled
-                    className="mt-6 w-full rounded-full bg-[var(--warm-gray)]/30 py-4 px-6 font-semibold text-[var(--warm-gray)] cursor-not-allowed"
+                    className="mt-6 w-full rounded-full bg-[var(--border-subtle)] py-4 px-6 text-sm font-medium text-[var(--foreground-muted)] cursor-not-allowed"
                   >
                     Booking Unavailable
                   </button>
                 )}
 
-                <p className="mt-4 text-center text-xs text-[var(--warm-gray)]">
+                <p className="mt-4 text-center text-xs text-[var(--foreground-muted)]">
                   You&apos;ll be redirected to the venue&apos;s website to complete your booking.
                 </p>
               </div>
 
               {/* Quick Info */}
-              <div
-                className="rounded-2xl border border-[var(--warm-gray)]/10 p-6"
-                style={{ backgroundColor: 'var(--cream)', boxShadow: '0 4px 20px rgba(45,42,38,0.06)' }}
-              >
-                <h3 className="font-serif text-lg font-semibold text-[var(--foreground)]">
+              <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-6">
+                <h3 className="text-base font-semibold text-[var(--foreground)]">
                   Quick Info
                 </h3>
                 <div className="mt-4 space-y-3 text-sm">
                   {room.theme && (
                     <div className="flex justify-between gap-2">
-                      <span className="text-[var(--warm-gray)]">Theme</span>
+                      <span className="text-[var(--foreground-muted)]">Theme</span>
                       <span className="font-medium text-[var(--foreground)]">{room.theme}</span>
                     </div>
                   )}
                   {room.difficulty !== null && (
                     <div className="flex justify-between gap-2">
-                      <span className="text-[var(--warm-gray)]">Difficulty</span>
+                      <span className="text-[var(--foreground-muted)]">Difficulty</span>
                       <span className="font-medium text-[var(--foreground)]">{room.difficulty}/5</span>
                     </div>
                   )}
                   {room.duration_minutes && (
                     <div className="flex justify-between gap-2">
-                      <span className="text-[var(--warm-gray)]">Duration</span>
+                      <span className="text-[var(--foreground-muted)]">Duration</span>
                       <span className="font-medium text-[var(--foreground)]">{room.duration_minutes} min</span>
                     </div>
                   )}
                   {(room.min_players || room.max_players) && (
                     <div className="flex justify-between gap-2">
-                      <span className="text-[var(--warm-gray)]">Players</span>
+                      <span className="text-[var(--foreground-muted)]">Players</span>
                       <span className="font-medium text-[var(--foreground)]">
                         {room.min_players ?? '?'}–{room.max_players ?? '?'}
                       </span>
@@ -455,7 +425,7 @@ export default function RoomDetailPage() {
 
               <Link
                 href="/map"
-                className="flex w-full items-center justify-center rounded-full border-2 border-[var(--warm-gray)]/20 bg-transparent py-3 px-6 font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--warm-gray)]/10"
+                className="flex w-full items-center justify-center rounded-full border border-[var(--border)] bg-transparent py-3 px-6 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--surface-hover)]"
               >
                 View on Map
               </Link>

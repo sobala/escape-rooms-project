@@ -79,11 +79,11 @@ function formatPrice(room: Room): string {
 }
 
 const DIFFICULTY_CONFIG = [
-  { level: 1, label: 'Easy', bg: '#84a98c', text: '#2d2a26' },
-  { level: 2, label: 'Easy', bg: '#84a98c', text: '#2d2a26' },
-  { level: 3, label: 'Medium', bg: '#d4a373', text: '#2d2a26' },
-  { level: 4, label: 'Hard', bg: '#c1666b', text: '#f5f1e8' },
-  { level: 5, label: 'Expert', bg: '#6b4e71', text: '#f5f1e8' },
+  { level: 1, label: 'Easy', bg: 'rgba(107,127,103,0.15)', text: '#9BAA97' },
+  { level: 2, label: 'Easy', bg: 'rgba(107,127,103,0.15)', text: '#9BAA97' },
+  { level: 3, label: 'Medium', bg: 'rgba(184,155,98,0.12)', text: '#D4C4A0' },
+  { level: 4, label: 'Hard', bg: 'rgba(168,96,90,0.12)', text: '#D4A09A' },
+  { level: 5, label: 'Expert', bg: 'rgba(92,40,36,0.2)', text: '#D4A09A' },
 ];
 
 function getDifficultyStyle(difficulty: number | null) {
@@ -135,7 +135,7 @@ export default function MapView({ rooms }: MapViewProps) {
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
+      style: 'mapbox://styles/sobala/cmlksm1gv00kp01s91oehdctc',
       center: [-0.1276, 51.5074],
       zoom: 11,
     });
@@ -171,10 +171,10 @@ export default function MapView({ rooms }: MapViewProps) {
       el.style.cursor = 'pointer';
 
       const getColor = (diff: number) => {
-        if (diff <= 2) return '#84a98c';
-        if (diff === 3) return '#d4a373';
-        if (diff === 4) return '#c1666b';
-        return '#6b4e71';
+        if (diff <= 2) return '#6B7F67';
+        if (diff === 3) return '#B89B62';
+        if (diff === 4) return '#A8605A';
+        return '#5C2824';
       };
 
       const isSelected = selectedRoom?.id === room.id;
@@ -184,7 +184,7 @@ export default function MapView({ rooms }: MapViewProps) {
             width: 100%;
             height: 100%;
             background: ${getColor(room.difficulty)};
-            border: ${isSelected ? '4px' : '2px'} solid ${isSelected ? '#2d2a26' : 'white'};
+            border: ${isSelected ? '4px' : '2px'} solid ${isSelected ? '#ECEEE9' : 'white'};
             border-radius: 50% 50% 50% 0;
             transform: rotate(-45deg);
             box-shadow: 0 4px 12px rgba(0,0,0,0.25);
@@ -238,21 +238,17 @@ export default function MapView({ rooms }: MapViewProps) {
     <div className="flex h-full w-full flex-col lg:flex-row">
       {/* Left sidebar - list + filters */}
       <aside
-        className="flex max-h-[45vh] w-full shrink-0 flex-col overflow-hidden border-r-0 border-b border-[var(--warm-gray)]/15 lg:max-h-none lg:w-[340px] lg:border-b-0 lg:border-r"
-        style={{
-          backgroundColor: 'var(--cream-white)',
-          boxShadow: '1px 0 0 rgba(107,101,96,0.06)',
-        }}
+        className="flex max-h-[45vh] w-full shrink-0 flex-col overflow-hidden border-r-0 border-b border-[var(--border)] bg-[var(--surface)] lg:max-h-none lg:w-[340px] lg:border-b-0 lg:border-r"
       >
         {/* Filters */}
-        <div className="shrink-0 border-b border-[var(--warm-gray)]/12 p-4">
+        <div className="shrink-0 border-b border-[var(--border)] p-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-serif text-base font-semibold text-[var(--foreground)]">
+            <h2 className="text-sm font-semibold text-[var(--foreground)]">
               {filteredRooms.length} room{filteredRooms.length !== 1 ? 's' : ''}
             </h2>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="rounded-full bg-[var(--accent)] px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:opacity-90 transition-colors"
+              className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-xs font-medium text-[var(--foreground)] transition-colors hover:border-[var(--accent)]/30 hover:bg-[var(--accent-muted)]/50"
             >
               {showFilters ? 'Hide' : 'Filters'}
             </button>
@@ -261,14 +257,14 @@ export default function MapView({ rooms }: MapViewProps) {
           {showFilters && (
             <div className="mt-4 space-y-3">
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-[var(--warm-gray)]">Theme</label>
+                <label className="mb-1.5 block text-xs font-medium text-[var(--foreground-muted)]">Theme</label>
                 <div className="flex flex-wrap gap-1.5">
                   <button
                     onClick={() => setThemeFilter('')}
-                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                       !themeFilter
-                        ? 'bg-[rgba(45,42,38,0.12)] text-[var(--foreground)]'
-                        : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
+                        ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-foreground)]'
+                        : 'border-[var(--border)] text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
                     }`}
                   >
                     All
@@ -277,11 +273,11 @@ export default function MapView({ rooms }: MapViewProps) {
                     <button
                       key={theme}
                       onClick={() => setThemeFilter(theme)}
-                      className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                        themeFilter === theme
-                          ? 'bg-[rgba(45,42,38,0.12)] text-[var(--foreground)]'
-                          : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
-                      }`}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      themeFilter === theme
+                        ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-foreground)]'
+                        : 'border-[var(--border)] text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
+                    }`}
                     >
                       {theme}
                     </button>
@@ -290,11 +286,11 @@ export default function MapView({ rooms }: MapViewProps) {
               </div>
 
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-[var(--warm-gray)]">Difficulty</label>
+                <label className="mb-1.5 block text-xs font-medium text-[var(--foreground-muted)]">Difficulty</label>
                 <select
                   value={difficultyFilter}
                   onChange={(e) => setDifficultyFilter(e.target.value)}
-                  className="w-full rounded-lg border border-[var(--warm-gray)]/25 bg-white px-3 py-2 text-xs text-[var(--foreground)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/30"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs text-[var(--foreground)] focus:border-[var(--foreground)] focus:outline-none"
                 >
                   <option value="">All</option>
                   <option value="1">1 – Very easy</option>
@@ -310,7 +306,7 @@ export default function MapView({ rooms }: MapViewProps) {
                   setThemeFilter('');
                   setDifficultyFilter('');
                 }}
-                className="w-full rounded-lg border border-[var(--warm-gray)]/15 px-3 py-2 text-xs font-medium text-[var(--warm-gray)] transition-colors hover:bg-[var(--warm-gray)]/8"
+                className="w-full rounded-lg border border-[var(--border)] px-3 py-2 text-xs font-medium text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface-hover)]"
               >
                 Clear filters
               </button>
@@ -329,8 +325,8 @@ export default function MapView({ rooms }: MapViewProps) {
                 key={room.id}
                 type="button"
                 onClick={() => setSelectedRoom(room)}
-                className={`w-full border-b border-[var(--warm-gray)]/8 px-4 py-3 text-left transition-colors hover:bg-[var(--warm-gray)]/6 ${
-                  isSelected ? 'bg-[var(--warm-gray)]/10' : ''
+                className={`w-full border-b border-[var(--border)] px-4 py-3 text-left transition-colors hover:bg-[var(--surface-hover)] ${
+                  isSelected ? 'bg-[var(--surface-hover)]' : ''
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -340,7 +336,7 @@ export default function MapView({ rooms }: MapViewProps) {
                   />
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-medium text-[var(--foreground)]">{room.name}</p>
-                    <p className="truncate text-xs text-[var(--warm-gray)]">
+                    <p className="truncate text-xs text-[var(--foreground-muted)]">
                       {room.venue_name}
                       {room.city ? ` · ${room.city}` : ''}
                     </p>
@@ -356,22 +352,16 @@ export default function MapView({ rooms }: MapViewProps) {
 
         {/* Detail tile - opens when room selected */}
         {selectedRoom && (
-          <div
-            className="shrink-0 border-t border-[var(--warm-gray)]/12 p-4"
-            style={{
-              backgroundColor: 'var(--cream)',
-              boxShadow: '0 -4px 20px rgba(45,42,38,0.06)',
-            }}
-          >
+          <div className="shrink-0 border-t border-[var(--border)] bg-[var(--background-alt)] p-4">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <h3 className="font-serif font-semibold text-[var(--foreground)]">{selectedRoom.name}</h3>
-                <p className="mt-0.5 text-sm text-[var(--warm-gray)]">{selectedRoom.venue_name}</p>
+                <h3 className="font-semibold text-[var(--foreground)]">{selectedRoom.name}</h3>
+                <p className="mt-0.5 text-sm text-[var(--foreground-muted)]">{selectedRoom.venue_name}</p>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedRoom(null)}
-                className="shrink-0 rounded-full p-1.5 text-[var(--warm-gray)] hover:bg-[var(--warm-gray)]/15 hover:text-[var(--foreground)] transition-colors"
+                className="shrink-0 rounded-full p-1.5 text-[var(--foreground-muted)] hover:bg-[var(--border)] hover:text-[var(--foreground)] transition-colors"
                 aria-label="Close"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -391,20 +381,14 @@ export default function MapView({ rooms }: MapViewProps) {
                 {getDifficultyStyle(selectedRoom.difficulty).label}
               </span>
               {selectedRoom.theme && (
-                <span className="rounded-full border border-[var(--warm-gray)]/25 px-2 py-0.5 text-xs text-[var(--warm-gray)]">
-                  {selectedRoom.theme}
-                </span>
+                <span className="text-xs text-[var(--foreground-muted)]">{selectedRoom.theme}</span>
               )}
               <span className="text-sm font-semibold text-[var(--foreground)]">{formatPrice(selectedRoom)}</span>
             </div>
 
             <Link
               href={`/rooms/${selectedRoom.id}`}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-all"
-              style={{
-                backgroundColor: 'var(--accent)',
-                boxShadow: '0 2px 8px rgba(63,95,74,0.3)',
-              }}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2.5 text-sm font-medium text-[var(--accent-foreground)] shadow-[var(--shadow-accent)] transition-all hover:bg-[var(--accent-hover)]"
             >
               View details
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -423,31 +407,24 @@ export default function MapView({ rooms }: MapViewProps) {
           style={{ minHeight: 'calc(100vh - 140px)' }}
         />
 
-        {/* Legend */}
-        <div
-          className="absolute bottom-4 right-4 z-10 rounded-xl border px-3 py-2.5 shadow-lg"
-          style={{
-            backgroundColor: 'var(--cream)',
-            borderColor: 'rgba(107,101,96,0.15)',
-            boxShadow: 'var(--shadow-card)',
-          }}
-        >
-          <h4 className="mb-1.5 font-serif text-xs font-semibold text-[var(--foreground)]">Difficulty</h4>
-          <div className="space-y-1 text-[11px] text-[var(--warm-gray)]">
+        {/* Legend – matches sidebar surface, subtle border */}
+        <div className="absolute bottom-4 right-4 z-10 rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 shadow-[var(--shadow-card)]">
+          <h4 className="mb-1.5 text-xs font-semibold text-[var(--foreground)]">Difficulty</h4>
+          <div className="space-y-1 text-[11px] text-[var(--foreground-muted)]">
             <div className="flex items-center gap-2">
-              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: '#84a98c' }} />
+              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: '#6B7F67' }} />
               <span>Easy (1–2)</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: '#d4a373' }} />
+              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: '#B89B62' }} />
               <span>Medium (3)</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: '#c1666b' }} />
+              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: '#A8605A' }} />
               <span>Hard (4)</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: '#6b4e71' }} />
+              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: '#5C2824' }} />
               <span>Expert (5)</span>
             </div>
           </div>

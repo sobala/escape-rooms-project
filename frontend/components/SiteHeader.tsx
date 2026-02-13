@@ -1,25 +1,46 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function SiteHeader() {
   const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+
+  const isHome = pathname === '/';
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); // check initial state
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const showBackground = !isHome || scrolled;
 
   return (
-    <header className="sticky top-0 z-20 border-b border-[var(--warm-gray)]/15 bg-[var(--cream-white)]/95 backdrop-blur-sm">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header
+      className={`sticky top-0 z-20 backdrop-blur-[1px] transition-colors duration-200 ${
+        showBackground ? 'bg-[var(--background)]/97' : 'bg-transparent'
+      }`}
+    >
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="font-serif text-xl font-semibold tracking-tight text-[var(--foreground)]"
+          className={`text-lg font-semibold tracking-tight ${
+            isHome && !scrolled ? 'text-[#E2E4DE]' : 'text-[var(--foreground)]'
+          }`}
         >
-          escaperoomsnearme.io
+          Escape Room Near Me
         </Link>
-        <nav className="flex items-center gap-6 sm:gap-8">
+        <nav className="flex items-center gap-8">
           <Link
             href="/"
             className={`text-sm font-medium transition-colors ${
-              pathname === '/' ? 'text-[var(--foreground)]' : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
+              pathname === '/'
+                ? isHome && !scrolled ? 'text-[#E2E4DE]' : 'text-[var(--foreground)]'
+                : isHome && !scrolled ? 'text-[#8A8C86] hover:text-[#E2E4DE]' : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
             }`}
           >
             Home
@@ -27,15 +48,19 @@ export default function SiteHeader() {
           <Link
             href="/browse"
             className={`text-sm font-medium transition-colors ${
-              pathname === '/browse' ? 'text-[var(--foreground)]' : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
+              pathname === '/browse'
+                ? isHome && !scrolled ? 'text-[#E2E4DE]' : 'text-[var(--foreground)]'
+                : isHome && !scrolled ? 'text-[#8A8C86] hover:text-[#E2E4DE]' : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
             }`}
           >
             Browse
           </Link>
           <Link
             href="/map"
-            className={`text-sm font-semibold transition-colors ${
-              pathname === '/map' ? 'text-[var(--accent)]' : 'text-[var(--accent)] hover:text-[var(--accent-hover)]'
+            className={`text-sm font-medium transition-colors ${
+              pathname === '/map'
+                ? 'text-[var(--accent)] font-semibold'
+                : isHome && !scrolled ? 'text-[#8A8C86] hover:text-[var(--accent)]' : 'text-[var(--foreground-muted)] hover:text-[var(--accent)]'
             }`}
           >
             Map

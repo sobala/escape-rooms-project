@@ -4,11 +4,11 @@ import Link from 'next/link';
 import type { RoomCardData } from '@/components/RoomCard';
 
 const DIFFICULTY_CONFIG = [
-  { level: 1, label: 'Easy', bg: '#84a98c', text: '#2d2a26' },
-  { level: 2, label: 'Easy', bg: '#84a98c', text: '#2d2a26' },
-  { level: 3, label: 'Medium', bg: '#d4a373', text: '#2d2a26' },
-  { level: 4, label: 'Hard', bg: '#c1666b', text: '#f5f1e8' },
-  { level: 5, label: 'Expert', bg: '#6b4e71', text: '#f5f1e8' },
+  { level: 1, label: 'Easy', bg: 'rgba(107,127,103,0.15)', text: '#9BAA97' },
+  { level: 2, label: 'Easy', bg: 'rgba(107,127,103,0.15)', text: '#9BAA97' },
+  { level: 3, label: 'Medium', bg: 'rgba(184,155,98,0.12)', text: '#D4C4A0' },
+  { level: 4, label: 'Hard', bg: 'rgba(168,96,90,0.12)', text: '#D4A09A' },
+  { level: 5, label: 'Expert', bg: 'rgba(92,40,36,0.2)', text: '#D4A09A' },
 ];
 
 function getDifficultyStyle(difficulty: number | null) {
@@ -53,35 +53,25 @@ export default function RoomListItem({ room }: { room: RoomCardData }) {
   return (
     <Link
       href={`/rooms/${room.id}`}
-      className="group flex items-center gap-4 rounded-2xl border border-[var(--warm-gray)]/10 p-4 transition-all duration-200 hover:border-[var(--warm-gray)]/20 sm:gap-6 sm:p-5"
-      style={{
-        backgroundColor: '#faf8f5',
-        boxShadow: '0 4px 20px rgba(45,42,38,0.06)',
-      }}
+      className="group flex items-center gap-4 rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] p-4 shadow-[var(--shadow-card)] transition-all hover:border-[var(--accent)]/20 hover:bg-[var(--accent-muted)]/30 sm:gap-6 sm:p-5"
     >
-      <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-xl bg-[var(--warm-gray)]/15 sm:h-24 sm:w-32">
+      <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-[var(--border-subtle)] sm:h-24 sm:w-32">
         {room.primary_image_url ? (
           <img
             src={room.primary_image_url}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
           />
         ) : (
-          <div
-            className="absolute inset-0 transition-transform duration-300 group-hover:scale-105"
-            style={{
-              backgroundImage: `linear-gradient(135deg, rgba(212,163,115,0.25) 0%, rgba(132,169,140,0.2) 100%)`,
-            }}
-          />
+          <div className="absolute inset-0 bg-[var(--border-subtle)]" />
         )}
-        <div className="absolute top-1.5 left-1.5">
+        <div className="absolute top-2 left-2">
           <span
             className="inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium"
             style={{
               backgroundColor: difficultyStyle.bg,
               color: difficultyStyle.text,
-              boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
             }}
           >
             {difficultyStyle.label}
@@ -90,20 +80,18 @@ export default function RoomListItem({ room }: { room: RoomCardData }) {
       </div>
 
       <div className="min-w-0 flex-1">
-        <h3 className="font-serif font-semibold text-[var(--foreground)] transition-colors group-hover:text-[var(--accent)] truncate sm:line-clamp-1">
+        <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[var(--accent)] truncate sm:line-clamp-1">
           {room.name}
         </h3>
         {room.venue_name && (
-          <p className="mt-0.5 truncate text-sm text-[var(--warm-gray)]">{room.venue_name}</p>
+          <p className="mt-0.5 truncate text-sm text-[var(--foreground-muted)]">{room.venue_name}</p>
         )}
         <div className="mt-2 flex flex-wrap items-center gap-2">
           {room.theme && (
-            <span className="inline-block rounded-full border border-[var(--warm-gray)]/20 px-2.5 py-0.5 text-xs text-[var(--warm-gray)]">
-              {room.theme}
-            </span>
+            <span className="text-xs text-[var(--foreground-muted)]">{room.theme}</span>
           )}
           {room.city && (
-            <span className="text-xs text-[var(--warm-gray)]">{room.city}</span>
+            <span className="text-xs text-[var(--foreground-muted)]">{room.city}</span>
           )}
         </div>
       </div>
@@ -112,14 +100,9 @@ export default function RoomListItem({ room }: { room: RoomCardData }) {
         <div className="font-semibold text-[var(--foreground)]">
           {formatPriceRange(room.price_min, room.price_max, room.price, room.currency)}
         </div>
-        <div className="text-xs text-[var(--warm-gray)]">/ person</div>
-        <span
-          className="mt-2 inline-flex items-center text-sm font-semibold text-[var(--accent)] transition-colors group-hover:text-[var(--accent-hover)]"
-        >
-          Discover
-          <svg className="ml-0.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+        <div className="text-xs text-[var(--foreground-muted)]">/ person</div>
+        <span className="mt-1 inline-flex items-center text-sm font-medium text-[var(--accent)] group-hover:text-[var(--accent-hover)] transition-colors">
+          View →
         </span>
       </div>
     </Link>

@@ -11,10 +11,10 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 const DIFFICULTY_OPTIONS = [
   { value: 0, label: 'All', color: null },
-  { value: 1, label: 'Easy', color: '#84a98c' },
-  { value: 2, label: 'Medium', color: '#d4a373' },
-  { value: 3, label: 'Hard', color: '#c1666b' },
-  { value: 4, label: 'Expert', color: '#6b4e71' },
+  { value: 1, label: 'Easy', color: '#6B7F67' },
+  { value: 2, label: 'Medium', color: '#B89B62' },
+  { value: 3, label: 'Hard', color: '#A8605A' },
+  { value: 4, label: 'Expert', color: '#5C2824' },
 ] as const;
 
 const DURATION_OPTIONS = [
@@ -134,30 +134,26 @@ export default function BrowsePage() {
       <SiteHeader />
 
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Title + view toggle */}
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="font-serif text-2xl font-semibold tracking-tight text-[var(--foreground)] sm:text-3xl">
+            <h1 className="text-2xl font-semibold tracking-tight text-[var(--foreground)] sm:text-3xl">
               Browse rooms
             </h1>
-            <p className="mt-1 text-[var(--warm-gray)]">
+            <p className="mt-1.5 text-base text-[var(--foreground-muted)]">
               {loading
                 ? 'Loading...'
                 : `${filteredRooms.length} room${filteredRooms.length !== 1 ? 's' : ''} in London`}
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="mr-2 text-sm text-[var(--warm-gray)]">View:</span>
-            <div
-              className="inline-flex rounded-full p-1"
-              style={{ backgroundColor: 'rgba(45,42,38,0.08)' }}
-            >
+            <span className="mr-2 text-sm text-[var(--foreground-muted)]">View:</span>
+            <div className="inline-flex rounded-full border border-[var(--border)] bg-[var(--surface)] p-1 shadow-[var(--shadow-sm)]">
               <button
                 onClick={() => setViewMode('tile')}
                 className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                   viewMode === 'tile'
-                    ? 'bg-[var(--accent)] text-white shadow-sm'
-                    : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
+                    ? 'bg-[var(--accent)] text-[var(--accent-foreground)] shadow-sm'
+                    : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
                 }`}
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,8 +165,8 @@ export default function BrowsePage() {
                 onClick={() => setViewMode('list')}
                 className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                   viewMode === 'list'
-                    ? 'bg-[var(--accent)] text-white shadow-sm'
-                    : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
+                    ? 'bg-[var(--accent)] text-[var(--accent-foreground)] shadow-sm'
+                    : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
                 }`}
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,12 +178,9 @@ export default function BrowsePage() {
           </div>
         </div>
 
-        {/* Filters - warm panel */}
-        <div
-          className="mb-8 rounded-2xl border border-[var(--warm-gray)]/12 p-5 sm:p-6"
-          style={{ backgroundColor: 'var(--cream-white)', boxShadow: 'var(--shadow-soft)' }}
-        >
-          <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[var(--warm-gray)]">
+        {/* Filters */}
+        <div className="mb-8 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-6">
+          <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
             Filters
           </h2>
 
@@ -199,18 +192,16 @@ export default function BrowsePage() {
                   <button
                     key={opt.value}
                     onClick={() => setDifficultyFilter(opt.value)}
-                    className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                       difficultyFilter === opt.value
                         ? opt.color
-                          ? opt.value === 4
-                            ? 'text-[#f5f1e8] shadow-sm'
-                            : 'text-[#2d2a26] shadow-sm'
-                          : 'bg-[rgba(45,42,38,0.12)] text-[var(--foreground)] shadow-sm'
-                        : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
+                          ? 'border-transparent text-white'
+                          : 'border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-foreground)]'
+                        : 'border-[var(--border)] text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)]/30'
                     }`}
                     style={
                       difficultyFilter === opt.value && opt.color
-                        ? { backgroundColor: opt.color }
+                        ? { backgroundColor: opt.color, borderColor: opt.color }
                         : difficultyFilter === opt.value
                           ? {}
                           : undefined
@@ -221,7 +212,7 @@ export default function BrowsePage() {
                         className="h-2 w-2 shrink-0 rounded-full"
                         style={{
                           backgroundColor:
-                            difficultyFilter === opt.value ? 'rgba(45,42,38,0.5)' : opt.color,
+                            difficultyFilter === opt.value ? 'rgba(255,255,255,0.6)' : opt.color,
                         }}
                       />
                     )}
@@ -236,11 +227,11 @@ export default function BrowsePage() {
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setThemeFilter('')}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                    !themeFilter
-                      ? 'bg-[rgba(45,42,38,0.12)] text-[var(--foreground)] shadow-sm'
-                      : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
-                  }`}
+                    className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                      !themeFilter
+                        ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-foreground)]'
+                        : 'border-[var(--border)] text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)]/30'
+                    }`}
                 >
                   All themes
                 </button>
@@ -248,10 +239,10 @@ export default function BrowsePage() {
                   <button
                     key={theme}
                     onClick={() => setThemeFilter(theme)}
-                    className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                       themeFilter === theme
-                        ? 'bg-[rgba(45,42,38,0.12)] text-[var(--foreground)] shadow-sm'
-                        : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
+                        ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-foreground)]'
+                        : 'border-[var(--border)] text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)]/30'
                     }`}
                   >
                     {theme}
@@ -267,10 +258,10 @@ export default function BrowsePage() {
                   <button
                     key={opt.value || 'all'}
                     onClick={() => setDurationFilter(opt.value)}
-                    className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                       durationFilter === opt.value
-                        ? 'bg-[rgba(45,42,38,0.12)] text-[var(--foreground)] shadow-sm'
-                        : 'text-[var(--warm-gray)] hover:text-[var(--foreground)]'
+                        ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-foreground)]'
+                        : 'border-[var(--border)] text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)]/30'
                     }`}
                   >
                     {opt.label}
@@ -296,43 +287,39 @@ export default function BrowsePage() {
 
         {/* Results */}
         {loading ? (
-          <div className={viewMode === 'tile' ? 'grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3' : 'space-y-3'}>
+          <div className={viewMode === 'tile' ? 'grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3' : 'space-y-3'}>
             {[...Array(viewMode === 'tile' ? 6 : 8)].map((_, i) => (
               <div
                 key={i}
-                className={`animate-pulse overflow-hidden rounded-2xl border border-[var(--warm-gray)]/10 ${
+                className={`animate-pulse overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] ${
                   viewMode === 'list' ? 'flex gap-4 p-4' : ''
                 }`}
-                style={{ backgroundColor: 'var(--cream)', boxShadow: 'var(--shadow-soft)' }}
               >
-                <div className={viewMode === 'tile' ? 'aspect-video bg-[var(--warm-gray)]/15' : 'h-24 w-24 shrink-0 rounded-xl bg-[var(--warm-gray)]/15 sm:h-32 sm:w-32'} />
+                <div className={viewMode === 'tile' ? 'aspect-video bg-[var(--border-subtle)]' : 'h-24 w-24 shrink-0 rounded-lg bg-[var(--border-subtle)] sm:h-32 sm:w-32'} />
                 <div className="flex-1 space-y-2 p-4">
-                  <div className="h-4 w-3/4 rounded bg-[var(--warm-gray)]/20" />
-                  <div className="h-3 w-1/2 rounded bg-[var(--warm-gray)]/15" />
-                  <div className="mt-2 h-4 w-1/4 rounded bg-[var(--warm-gray)]/15" />
+                  <div className="h-4 w-3/4 rounded bg-[var(--border-subtle)]" />
+                  <div className="h-3 w-1/2 rounded bg-[var(--border-subtle)]" />
+                  <div className="mt-2 h-4 w-1/4 rounded bg-[var(--border-subtle)]" />
                 </div>
               </div>
             ))}
           </div>
         ) : filteredRooms.length === 0 ? (
-          <div
-            className="rounded-2xl border border-[var(--warm-gray)]/12 py-16 text-center"
-            style={{ backgroundColor: 'var(--card-bg)', boxShadow: 'var(--shadow-soft)' }}
-          >
+          <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] py-16 text-center">
             {fetchError ? (
               <>
-                <p className="text-[var(--warm-gray)]">Could not load rooms. {fetchError}</p>
-                <p className="mt-2 text-sm text-[var(--warm-gray)]/80">API: {API_URL}/api/rooms</p>
+                <p className="text-[var(--foreground-muted)]">Could not load rooms. {fetchError}</p>
+                <p className="mt-2 text-sm text-[var(--foreground-subtle)]">API: {API_URL}/api/rooms</p>
                 <button
                   onClick={loadRooms}
-                  className="mt-4 rounded-full bg-[var(--accent)] px-5 py-2.5 font-semibold text-white shadow-sm hover:opacity-90"
+                  className="mt-4 rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-[var(--accent-foreground)] hover:bg-[var(--accent-hover)]"
                 >
                   Retry
                 </button>
               </>
             ) : difficultyFilter > 0 || themeFilter ? (
               <>
-                <p className="text-[var(--warm-gray)]">No rooms match your filters.</p>
+                <p className="text-[var(--foreground-muted)]">No rooms match your filters.</p>
                 <button
                   onClick={() => {
                     setDifficultyFilter(0);
@@ -345,11 +332,11 @@ export default function BrowsePage() {
               </>
             ) : (
               <>
-                <p className="text-[var(--warm-gray)]">No rooms found.</p>
-                <p className="mt-2 text-sm text-[var(--warm-gray)]/80">Make sure the backend is running at {API_URL}</p>
+                <p className="text-[var(--foreground-muted)]">No rooms found.</p>
+                <p className="mt-2 text-sm text-[var(--foreground-subtle)]">Make sure the backend is running at {API_URL}</p>
                 <button
                   onClick={loadRooms}
-                  className="mt-4 rounded-full bg-[var(--accent)] px-5 py-2.5 font-semibold text-white shadow-sm hover:opacity-90"
+                  className="mt-4 rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-[var(--accent-foreground)] hover:bg-[var(--accent-hover)]"
                 >
                   Retry
                 </button>
@@ -357,7 +344,7 @@ export default function BrowsePage() {
             )}
           </div>
         ) : viewMode === 'tile' ? (
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredRooms.map((room) => (
               <RoomCard key={room.id} room={room} />
             ))}
@@ -374,7 +361,7 @@ export default function BrowsePage() {
           <div className="mt-10 text-center">
             <Link
               href="/map"
-              className="inline-flex items-center font-semibold text-[var(--accent)] hover:underline"
+              className="inline-flex items-center text-sm font-medium text-[var(--accent)] hover:underline"
             >
               View all on map
               <svg className="ml-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

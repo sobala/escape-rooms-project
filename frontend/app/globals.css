@@ -1,42 +1,64 @@
 @import "tailwindcss";
 
 :root {
-  /* Page: warm + very light yellow, almost no gray */
-  --background: #F3EFE6;
-  --foreground: #2d2a26;
-  --hero-bg: #1e3a2e;
-  --hero-bg-alt: #1e3a2e;
-  --forest-deep: #2d5016;
-  /* Everything except page: whiter surfaces (header, footer, strips, cards, panels) */
-  --cream-white: #FAF9F6;
-  --cream-pills: #FAF9F6;
-  --cream: #FAF9F6;
-  --cream-heading: #f5f1e8;
-  --warm-neutral: #F3EFE6;
-  --warm-taupe: #e8e3da;
-  --warm-gray: #6b6560;
-  --deep-olive: #3d4a2e;
-  --sage: #84a98c;
-  --amber: #d4a373;
-  --terracotta: #c1666b;
-  --plum: #6b4e71;
-  --gold: #c9a66b;
-  --gold-hover: #b8945a;
-  --accent: #3F5F4A;
-  --accent-hover: #354f42;
-  --card-bg: #d9d7cd;
-  --shadow-soft: 0 4px 20px rgba(45, 42, 38, 0.06);
-  --shadow-card: 0 8px 32px rgba(45, 42, 38, 0.08);
-  --shadow-inner: inset 0 1px 2px rgba(0, 0, 0, 0.06);
-  --glow-gold: 0 4px 24px rgba(201, 166, 107, 0.35);
-  --radius: 24px;
+  /* Dark Mode – surface hierarchy, cool green-gray, immersive */
+
+  /* Surface hierarchy – Level 0 to 3, livable dark */
+  --background: #1C1E1A;
+  --background-alt: #242620;
+  --foreground: #E2E4DE;
+  --foreground-muted: #8A8C86;
+  --foreground-subtle: #5A5C56;
+
+  /* Cards & elevated surfaces */
+  --surface: #2C2E28;
+  --surface-hover: #343632;
+  --surface-warm: #2C2E28;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+
+  /* Military Green – primary brand */
+  --accent: #2E4630;
+  --accent-hover: #486448;
+  --accent-muted: #1D2E1E;
+  --accent-foreground: #CDD6CB;
+
+  /* Amber – warmth accent (use sparingly) */
+  --accent-warm: #B89B62;
+  --accent-warm-muted: #463818;
+
+  /* Difficulty – tinted backgrounds */
+  --sage: #6B7F67;
+  --amber: #B89B62;
+  --terracotta: #A8605A;
+  --plum: #5C2824;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-accent: 0 4px 14px rgba(46, 70, 48, 0.5);
+
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Backward-compatible aliases */
+  --cream-white: var(--surface);
+  --cream: var(--surface);
+  --cream-pills: var(--surface);
+  --cream-heading: var(--background-alt);
+  --warm-gray: var(--foreground-muted);
+  --warm-neutral: var(--background-alt);
+  --warm-taupe: var(--border-subtle);
+  --card-bg: var(--surface-hover);
+  --shadow-soft: var(--shadow-sm);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
 }
 
 body {
@@ -45,10 +67,26 @@ body {
   font-family: var(--font-inter), system-ui, sans-serif;
 }
 
+/* Film grain overlay – very subtle */
+.grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 120px 120px;
+}
+
+/* Hero background – dark, layered */
+.hero-bg {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(ellipse 100% 80% at 15% 15%, rgba(46, 70, 48, 0.15) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 70% at 88% 85%, rgba(46, 70, 48, 0.1) 0%, transparent 55%),
+    linear-gradient(180deg, #1C1E1A 0%, #242620 50%, #2C2E28 100%);
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -56,11 +94,11 @@ body {
   }
 }
 
-/* Hero and card animations - ensure text and tiles are visible after animation */
-.animate-hero-1 { opacity: 0; animation: fadeUp 0.8s ease-out 0.2s forwards; }
-.animate-hero-2 { opacity: 0; animation: fadeUp 0.8s ease-out 0.4s forwards; }
-.animate-hero-3 { opacity: 0; animation: fadeUp 0.8s ease-out 0.6s forwards; }
-.animate-card-in { opacity: 0; animation: fadeUp 0.6s ease-out forwards; }
+.animate-hero-1 { opacity: 0; animation: fadeUp 0.6s ease-out 0.1s forwards; }
+.animate-hero-2 { opacity: 0; animation: fadeUp 0.6s ease-out 0.2s forwards; }
+.animate-hero-3 { opacity: 0; animation: fadeUp 0.6s ease-out 0.3s forwards; }
+.animate-card-in { opacity: 0; animation: fadeUp 0.5s ease-out forwards; }
+
 @media (prefers-reduced-motion: reduce) {
   .animate-hero-1, .animate-hero-2, .animate-hero-3, .animate-card-in {
     opacity: 1;
@@ -68,48 +106,45 @@ body {
   }
 }
 
-/* Mapbox popup close button – mobile-friendly touch target (min 44px) */
+/* Mapbox popup close button */
 .mapboxgl-popup-close-button {
-  font-size: 24px !important;
+  font-size: 22px !important;
   padding: 0 !important;
   margin: 0 !important;
-  min-width: 44px !important;
-  min-height: 44px !important;
-  width: 44px !important;
-  height: 44px !important;
-  line-height: 44px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+  line-height: 40px !important;
   text-align: center !important;
-  color: var(--foreground) !important;
+  color: var(--foreground-muted) !important;
   right: 4px !important;
   top: 4px !important;
   border-radius: 50% !important;
-  background: rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: var(--surface) !important;
+  border: 1px solid var(--border);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box !important;
 }
 .mapboxgl-popup-close-button:hover {
-  background: #fff !important;
+  background: var(--surface-hover) !important;
   color: var(--foreground) !important;
 }
 .mapboxgl-popup-content {
-  padding-top: 36px;
+  padding-top: 32px;
 }
 @media (max-width: 640px) {
   .mapboxgl-popup-close-button {
-    min-width: 48px !important;
-    min-height: 48px !important;
-    width: 48px !important;
-    height: 48px !important;
-    line-height: 48px !important;
-    font-size: 26px !important;
-    right: 6px !important;
-    top: 6px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    width: 44px !important;
+    height: 44px !important;
+    line-height: 44px !important;
+    font-size: 24px !important;
   }
   .mapboxgl-popup-content {
-    padding-top: 40px;
+    padding-top: 36px;
     min-width: 260px;
   }
 }
